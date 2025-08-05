@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Edit Notes</title>
+
+{% endblock %}
+
+
+{% block body %}
+<br><br>
+
+<div class="content">
+
+    <h3>Edit Notes for <i>{{ article_request.title }}</i></h3>
+    <br>
+    <form method="POST">
+        <textarea name="notes" maxlength="500" rows="5" style="width:50%">{{ article_request.notes or '' }}</textarea>
+        <br><br>
+        <button type="submit">Save</button> &nbsp;&nbsp;&nbsp;
+        <a href="{{ url_for('index') }}" class="one">Cancel</a>
+    </form>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Change Status</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <br><br><br>
+
+    <h2>
+        Change Status for <i>{{ article_request.title }}</i> 
+    </h2>
+
+    <br><br>
+
+    <form method="POST">
+
+        <select name="new_status">
+
+            <option value="invited (task open)"
+            {% if article_request.status == 'invited (task open)' %}selected{% endif %}>invited (task open)</option>
+
+
+            <option value="partial accepted (task open)"
+            {% if article_request.status == 'partial accepted (task open)' %}selected{% endif %}>
+                partial accepted (task open)
+            </option>
+
+
+            <option value="accepted (task open)"
+            {% if article_request.status == 'accepted (task open)' %}selected{% endif %}>
+                accepted (task open)
+            </option>
+
+            <option value="done (task closed)"
+            {% if article_request.status == 'done (task closed)' %}selected{% endif %}>
+                done (task closed)
+            </option>
+
+            <option value="dead (task closed)"
+            {% if article_request.status == 'dead (task closed)' %}selected{% endif %}>
+                dead (task closed)
+            </option>
+
+        </select>
+
+        <button type="submit">
+            Update
+        </button>
+
+        <a class='one' href="{{ url_for('index') }}" class="button">
+            Cancel
+        </a>
+
+    </form>
+
+
+</div>
+
+{% endblock %}

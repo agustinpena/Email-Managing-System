@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Confirm Deletion</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+
+  <br><br><br>
+  <h1>Delete "{{ article_request.title }}"?</h1>
+
+  <form style="display: inline-block; margin-right: 30px;"
+  method="POST" action="{{ url_for('delete_article', id=article_request.id) }}">
+    <button type="submit">Confirm Delete</button>
+  </form>
+
+  <form style="display: inline-block;" action="{{ url_for('index') }}">
+    <button type="submit">Cancel</button>
+  </form>
+
+</div>
+
+{% endblock %}

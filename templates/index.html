@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Data Grid</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <br>
+    <h1><i>Martin's Data Grid</i></h1>
+    {% if article_requests | length < 1 %}
+    <h3>The grid is not populated. Please add a csv file.</h3>
+    {% else %}
+
+    <a href="{{ url_for('export_excel') }}">
+        <button class="right-button">Export Data to Excel file</button>
+    </a>
+    <br><br>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Action Links</th>
+                <th>Journal</th>
+                <th>Collection</th>
+                <th>Article Type</th>
+                <th>Article Title</th>
+                <th>Author 1</th>
+                <th>Email 1</th>
+                <th>Author 2</th>
+                <th>Email 2</th>
+                <th>Author 3</th>
+                <th>Email 3</th>
+                <th>Date Invited</th>
+                <th>Status</th>
+                <th>Date from Latest Change in the Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article_request in article_requests %}
+            <tr>
+                <td>
+                    <a class='one' href="{{ url_for('change_status', id=article_request.id) }}">Change Status</a><br>
+
+                    <a class='two' href="{{ url_for('select_template', article_request_id=article_request.id) }}">Draft Email</a><br>
+
+                    <a class='one' href="{{ url_for('edit_notes', id=article_request.id) }}">Edit Notes</a><br>
+
+                    <a class='two' href="{{ url_for('confirm_delete', id=article_request.id) }}">Delete Row</a>
+                </td>
+                <td>{{article_request.journal}}</td>
+                <td>{{article_request.collection}}</td>
+                <td>{{article_request.type}}</td>
+                <td>{{article_request.title}}</td>
+                <td>{{article_request.author1}}</td>
+                <td>{{article_request.email1}}</td>
+                <td>{{article_request.author2}}</td>
+                <td>{{article_request.email2}}</td>
+                <td>{{article_request.author3}}</td>
+                <td>{{article_request.email3}}</td>
+                <td>{{article_request.date_invited}}</td>
+                <td>{{article_request.status}}</td>
+                <td>{{article_request.last_change_in_notes}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endif %}
+
+<!-- table ends | starts upload a csv file & export to excel -->
+    <br><br>
+
+        <form style="display: inline-block;" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required>
+            <button type="submit">Upload CSV file</button>
+        </form>
+
+</div>
+<br><br><br>
+
+{% endblock %}
