@@ -8,8 +8,8 @@
 
 <div class="content">
     <br>
-    <h2>Edit Email for <i>{{ article_request.title }}</i></h2>
-    <b>Recipient: </b><i>{{article_request.email1}}</i>
+    <h2>Edit Email for <i>{{ task.title }}</i></h2>
+    <b>Recipient: </b><i>{{ task.email1 }}</i>
     <br><br><br>
     <form method="POST">
         <textarea name="email_content" rows="20" style="width:60%">{{ email_content }}</textarea>

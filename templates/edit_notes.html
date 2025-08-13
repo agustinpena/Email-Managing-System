@@ -12,10 +12,10 @@
 
 <div class="content">
 
-    <h3>Edit Notes for <i>{{ article_request.title }}</i></h3>
+    <h3>Edit Notes for <i>{{ task.title }}</i></h3>
     <br>
     <form method="POST">
-        <textarea name="notes" maxlength="500" rows="5" style="width:50%">{{ article_request.notes or '' }}</textarea>
+        <textarea name="notes" maxlength="500" rows="5" style="width:50%">{{ task.notes or '' }}</textarea>
         <br><br>
         <button type="submit">Save</button> &nbsp;&nbsp;&nbsp;
         <a href="{{ url_for('index') }}" class="one">Cancel</a>

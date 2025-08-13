@@ -26,14 +26,14 @@ mail = Mail(app)
 
 
 # create MODEL for each row in database
-class ArticleRequest(db.Model):
-
+class Task(db.Model):
     # assign values to fields
     id = db.Column(db.Integer, primary_key=True)
     journal = db.Column(db.String(100), nullable=False)
     collection = db.Column(db.String(50))
     type = db.Column(db.String(50))
     title = db.Column(db.String(120))
+    deadline = db.Column(db.Date)
     author1 = db.Column(db.String(30))
     email1 = db.Column(db.String(30))
     author2 = db.Column(db.String(30))
@@ -49,79 +49,119 @@ class ArticleRequest(db.Model):
         return f"Article Request {self.id}"
 
 
-def parse_date(date_string):
-    """Convert YYYY-MM-DD string to date object"""
-    if date_string:  # Only parse if string is not empty
-        return datetime.strptime(date_string, "%Y-%m-%d").date()
-    return None  # Return None for empty strings
+# define function that turns excel file into dataframe
+def turn_excel_file_into_df_for_grid(excel_file):
+    '''turns an excel file into a suitably
+    formatted df for the table grid'''
+    # define columns for final grid
+    right_columns = ['journal', 'collection', 'type', 'title', 'deadline',
+                     'author1', 'email1', 'author2', 'email2', 'author3',
+                     'email3', 'date_invited', 'status', 'last_change_in_notes'
+                     ]
+    # define necessary dataframes
+    df = pd.read_excel(excel_file)
+    new_df = pd.DataFrame()
+    # change original df column names if needed
+    for c_title in df.columns:
+        for r_col in right_columns:
+            if r_col in c_title.replace(' ', '').lower():
+                df.rename(columns={c_title: r_col}, inplace=True)
+    # create new dataframe with all necessary columns
+    for col in right_columns:
+        # add existing columns
+        if col in df.columns:
+            # if column contains date, convert to python datetime format
+            if col in {'deadline', 'date_invited', 'last_change_in_notes'}:
+                new_df[col] = df[col].apply(lambda x: pd.Timestamp(x))
+                new_df[col] = new_df[col].apply(
+                    lambda x: x.to_pydatetime().date())
+            # add a non-date column as it is
+            new_df[col] = df[col]
+        # create & add non-existing date column containing dummy date
+        elif col in {'deadline', 'date_invited', 'last_change_in_notes'}:
+            new_df[col] = pd.Timestamp('2000-01-01')
+        # add a column containing an empty string
+        else:
+            new_df[col] = ''
+    # return final dataframe
+    return new_df
 
 
-# define function to import csv data to data base
-def import_csv_to_db(csv_data):
-    # assume file contains no headers
-    for row in csv_data:
+# define function to import excel file to database
+def import_excel_to_db(excel_file):
+    # get dataframe from excel file
+    df = turn_excel_file_into_df_for_grid(excel_file)
+    # insert dataframe rows as tasks
+    for i in range(len(df)):
+        # convert pandas timestamps to python datetime format
+        deadline_py = df.iloc[i]['deadline'].to_pydatetime().date()
+        date_invited_py = df.iloc[i]['date_invited'].to_pydatetime().date()
+        last_change_in_notes_py = df.iloc[i]['last_change_in_notes'].to_pydatetime(
+        ).date()
         # Create a new record
         try:
-            article_request = ArticleRequest(
-                journal=row[0],  # type: ignore
-                collection=row[1],  # type: ignore
-                type=row[2],  # type: ignore
-                title=row[3],  # type: ignore
-                author1=row[4],  # type: ignore
-                email1=row[5],  # type: ignore
-                author2=row[6],  # type: ignore
-                email2=row[7],  # type: ignore
-                author3=row[8],  # type: ignore
-                email3=row[9],  # type: ignore
-                date_invited=parse_date(row[10]),  # type: ignore
-                status=row[11],  # type: ignore
-                last_change_in_notes=parse_date(row[12]))  # type: ignore
+            task = Task(
+                journal=df.iloc[i]['journal'],  # type: ignore
+                collection=df.iloc[i]['collection'],  # type: ignore
+                type=df.iloc[i]['type'],  # type: ignore
+                title=df.iloc[i]['title'],  # type: ignore
+                deadline=deadline_py,  # type: ignore
+                author1=df.iloc[i]['author1'],  # type: ignore
+                email1=df.iloc[i]['email1'],  # type: ignore
+                author2=df.iloc[i]['author2'],  # type: ignore
+                email2=df.iloc[i]['email2'],  # type: ignore
+                author3=df.iloc[i]['author3'],  # type: ignore
+                email3=df.iloc[i]['email3'],  # type: ignore
+                date_invited=date_invited_py,  # type: ignore
+                status=df.iloc[i]['status'],  # type: ignore
+                last_change_in_notes=last_change_in_notes_py  # type: ignore
+            )
 
-            db.session.add(article_request)
+            db.session.add(task)
+            print(f'task {i} added to database commit')  # debugging
+
         except Exception as e:
-            print(f"Error adding row {row}: {e}")
+            print(f"Error adding to commit => task {i}: {e}")
             db.session.rollback()
     try:
         db.session.commit()
         return True
     except Exception as e:
         db.session.rollback()
-        print(f"Commit failed: {e}")
+        print(f"Commit to database failed: {e}")
         return False
 
 
 # route to main page
 @app.route('/', methods=['POST', 'GET'])  # type: ignore
 def index():
-    # add add an csv file with article requests
+    # add add an csv file with tasks
     if request.method == 'POST':
         my_file = request.files.get('file')
         if not my_file or my_file.filename == '':
             return ('No file selected!', 400)
-        if my_file.filename.endswith('.csv'):  # type: ignore
-            # read csv file as a string & remove unnecesary quotation marks
-            raw_csv_data = my_file.read().decode('utf-8').replace('"', '')
-            # turn string into a list of lists (rows for the db)
-            csv_data = [x.split(',') for x in raw_csv_data.split('\n')]
-            import_csv_to_db(csv_data)
+
+        if my_file.filename.endswith('.xlsx'):  # type: ignore
+            import_excel_to_db(my_file)
             return redirect('/')
-    # see all current article requests
+
+    # see all current tasks
     else:
-        art_requests = ArticleRequest.query.all()
-        return render_template('index.html', article_requests=art_requests)
+        tasks = Task.query.all()
+        return render_template('index.html', tasks=tasks)
 
 
 # route to confirm deletion
 @app.route('/confirm-delete/<int:id>')
 def confirm_delete(id):
-    article_request = ArticleRequest.query.get_or_404(id)
-    return render_template('confirm_delete.html', article_request=article_request)
+    task = Task.query.get_or_404(id)
+    return render_template('confirm_delete.html', task=task)
 
 
 # route to delete an entry (row) in the data grid (database)
 @app.route('/delete/<int:id>', methods=['POST'])
 def delete_article(id):
-    ArticleRequest.query.filter_by(id=id).delete()
+    Task.query.filter_by(id=id).delete()
     db.session.commit()
     return redirect('/')
 
@@ -129,15 +169,15 @@ def delete_article(id):
 # route to change article request status
 @app.route('/change-status/<int:id>', methods=['GET', 'POST'])
 def change_status(id):
-    article_request = ArticleRequest.query.get_or_404(id)
+    task = Task.query.get_or_404(id)
 
     if request.method == 'POST':
         # Update status
-        article_request.status = request.form['new_status']
+        task.status = request.form['new_status']
         db.session.commit()
         return redirect('/')
 
-    return render_template('change_status.html', article_request=article_request)
+    return render_template('change_status.html', task=task)
 
 
 # route to export file in excel format
@@ -145,26 +185,26 @@ def change_status(id):
 def export_excel():
     try:
         # Get data from database
-        article_requests = ArticleRequest.query.all()
-
+        tasks = Task.query.all()
         # Convert to DataFrame (add your exact column names)
         data = [{
-            'Journal': article_request.journal,
-            'Collection': article_request.collection,
-            'Article Type': article_request.type,
-            'Article Title': article_request.title,
-            'Author 1': article_request.author1,
-            'Email 1': article_request.email1,
-            'Author 2': article_request.author2,
-            'Email 2': article_request.email2,
-            'Author 3': article_request.author3,
-            'Email 3': article_request.email3,
-            'Date Invited': article_request.date_invited,
-            'Status': article_request.status,
-            'Last Change in Notes': article_request.last_change_in_notes,
-            'Notes': article_request.notes
+            'Journal': task.journal,
+            'Collection': task.collection,
+            'Article Type': task.type,
+            'Article Title': task.title,
+            'Deadline': task.deadline,
+            'Author 1': task.author1,
+            'Email 1': task.email1,
+            'Author 2': task.author2,
+            'Email 2': task.email2,
+            'Author 3': task.author3,
+            'Email 3': task.email3,
+            'Date Invited': task.date_invited,
+            'Status': task.status,
+            'Last Change in Notes': task.last_change_in_notes,
+            'Notes': task.notes
             # Add all other fields you want to export
-        } for article_request in article_requests]
+        } for task in tasks]
 
         df = pd.DataFrame(data)
 
@@ -176,7 +216,7 @@ def export_excel():
         return send_file(
             output,
             mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            download_name='article_requests.xlsx',
+            download_name='tasks.xlsx',
             as_attachment=True
         )
 
@@ -187,16 +227,16 @@ def export_excel():
 # route for notes editing
 @app.route('/edit-notes/<int:id>', methods=['GET', 'POST'])
 def edit_notes(id):
-    article_request = ArticleRequest.query.get_or_404(id)
+    task = Task.query.get_or_404(id)
 
     if request.method == 'POST':
         notes = request.form['notes'][:500]
-        article_request.notes = notes
-        article_request.last_change_in_notes = datetime.now().date()
+        task.notes = notes
+        task.last_change_in_notes = datetime.now().date()
         db.session.commit()
         return redirect('/')
 
-    return render_template('edit_notes.html', article_request=article_request)
+    return render_template('edit_notes.html', task=task)
 
 
 # dictionary with email templates
@@ -219,25 +259,25 @@ Martin"""
 
 
 # route to select email template
-@app.route('/draft-email/<int:article_request_id>')
-def select_template(article_request_id):
-    article_request = ArticleRequest.query.get_or_404(article_request_id)
-    return render_template('select_template.html', article_request=article_request)
+@app.route('/draft-email/<int:task_id>')
+def select_template(task_id):
+    task = Task.query.get_or_404(task_id)
+    return render_template('select_template.html', task=task)
 
 
 # route to edit email template
-@app.route('/edit-email/<int:article_request_id>/<template_name>', methods=['GET', 'POST'])
-def edit_email(article_request_id, template_name):
-    article_request = ArticleRequest.query.get_or_404(article_request_id)
+@app.route('/edit-email/<int:task_id>/<template_name>', methods=['GET', 'POST'])
+def edit_email(task_id, template_name):
+    task = Task.query.get_or_404(task_id)
 
     # Prepare template variables
     template_vars = {
         'title': 'Dr.',
-        'last_name': article_request.author1.split()[-1],
-        'original_title': article_request.title,
-        'original_author': article_request.author1,
-        'article_type': article_request.type,
-        'article_title': article_request.title
+        'last_name': task.author1.split()[-1],
+        'original_title': task.title,
+        'original_author': task.author1,
+        'article_type': task.type,
+        'article_title': task.title
     }
 
     if request.method == 'POST':
@@ -245,7 +285,7 @@ def edit_email(article_request_id, template_name):
         msg = Message(
             'Martin\'s Article Request',
             sender='correo.x@mail.ru',
-            recipients=[article_request.email1],
+            recipients=[task.email1],
             body=request.form['email_content']
         )
         mail.send(msg)
@@ -254,7 +294,7 @@ def edit_email(article_request_id, template_name):
     email_content = EMAIL_TEMPLATES[template_name].format(**template_vars)
     return render_template('edit_email.html',
                            email_content=email_content,
-                           article_request=article_request)
+                           task=task)
 
 
 # runner and debugger

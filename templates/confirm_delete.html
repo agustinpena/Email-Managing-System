@@ -9,10 +9,10 @@
 <div class="content">
 
   <br><br><br>
-  <h1>Delete "{{ article_request.title }}"?</h1>
+  <h1>Delete <i>"{{ task.title }}"</i>?</h1>
 
   <form style="display: inline-block; margin-right: 30px;"
-  method="POST" action="{{ url_for('delete_article', id=article_request.id) }}">
+  method="POST" action="{{ url_for('delete_article', id=task.id) }}">
     <button type="submit">Confirm Delete</button>
   </form>
 

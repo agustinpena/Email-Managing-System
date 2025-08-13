@@ -11,15 +11,15 @@
 
 <div class="content">
 
-    <h2>Select Email Template for <i>{{ article_request.title }}</i></h2>
+    <h2>Select Email Template for <i>{{ task.title }}</i></h2>
 
-                <a class="one" href="{{ url_for('edit_email', article_request_id=article_request.id, template_name='template1') }}">
+                <a class="one" href="{{ url_for('edit_email', task_id=task.id, template_name='template1') }}">
                 Template 1
                 </a>
 
                 <br><br>
 
-                <a class="one" href="{{ url_for('edit_email', article_request_id=article_request.id, template_name='template2') }}">
+                <a class="one" href="{{ url_for('edit_email', task_id=task.id, template_name='template2') }}">
                 Template 2
                 </a>
 

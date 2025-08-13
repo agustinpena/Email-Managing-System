@@ -9,7 +9,7 @@
 <div class="content">
     <br>
     <h1><i>Martin's Data Grid</i></h1>
-    {% if article_requests | length < 1 %}
+    {% if tasks | length < 1 %}
     <h3>The grid is not populated. Please add a csv file.</h3>
     {% else %}
 
@@ -26,6 +26,7 @@
                 <th>Collection</th>
                 <th>Article Type</th>
                 <th>Article Title</th>
+                <th>Deadline</th>
                 <th>Author 1</th>
                 <th>Email 1</th>
                 <th>Author 2</th>
@@ -38,30 +39,31 @@
             </tr>
         </thead>
         <tbody>
-            {% for article_request in article_requests %}
+            {% for task in tasks %}
             <tr>
                 <td>
-                    <a class='one' href="{{ url_for('change_status', id=article_request.id) }}">Change Status</a><br>
+                    <a class='one' href="{{ url_for('change_status', id=task.id) }}">Change Status</a><br>
 
-                    <a class='two' href="{{ url_for('select_template', article_request_id=article_request.id) }}">Draft Email</a><br>
+                    <a class='two' href="{{ url_for('select_template', task_id=task.id) }}">Draft Email</a><br>
 
-                    <a class='one' href="{{ url_for('edit_notes', id=article_request.id) }}">Edit Notes</a><br>
+                    <a class='one' href="{{ url_for('edit_notes', id=task.id) }}">Edit Notes</a><br>
 
-                    <a class='two' href="{{ url_for('confirm_delete', id=article_request.id) }}">Delete Row</a>
+                    <a class='two' href="{{ url_for('confirm_delete', id=task.id) }}">Delete Row</a>
                 </td>
-                <td>{{article_request.journal}}</td>
-                <td>{{article_request.collection}}</td>
-                <td>{{article_request.type}}</td>
-                <td>{{article_request.title}}</td>
-                <td>{{article_request.author1}}</td>
-                <td>{{article_request.email1}}</td>
-                <td>{{article_request.author2}}</td>
-                <td>{{article_request.email2}}</td>
-                <td>{{article_request.author3}}</td>
-                <td>{{article_request.email3}}</td>
-                <td>{{article_request.date_invited}}</td>
-                <td>{{article_request.status}}</td>
-                <td>{{article_request.last_change_in_notes}}</td>
+                <td>{{task.journal}}</td>
+                <td>{{task.collection}}</td>
+                <td>{{task.type}}</td>
+                <td>{{task.title}}</td>
+                <td>{{task.deadline}}</td>
+                <td>{{task.author1}}</td>
+                <td>{{task.email1}}</td>
+                <td>{{task.author2}}</td>
+                <td>{{task.email2}}</td>
+                <td>{{task.author3}}</td>
+                <td>{{task.email3}}</td>
+                <td>{{task.date_invited}}</td>
+                <td>{{task.status}}</td>
+                <td>{{task.last_change_in_notes}}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -69,12 +71,14 @@
 
     {% endif %}
 
-<!-- table ends | starts upload a csv file & export to excel -->
+<!-- table ends  -->
+
+<!-- starts upload a csv file button & export to excel button -->
     <br><br>
 
         <form style="display: inline-block;" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept=".csv" required>
-            <button type="submit">Upload CSV file</button>
+            <input type="file" name="file" accept=".xlsx" required>
+            <button type="submit">Upload Excel file</button>
         </form>
 
 </div>
