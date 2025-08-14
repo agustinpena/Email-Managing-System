@@ -1,15 +1,9 @@
-from flask import Flask, render_template, request, redirect, send_file
-# from flask_migrate import Migrate
+from flask import Flask, render_template, request, redirect, send_file, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from datetime import datetime
 from io import BytesIO
 import pandas as pd
-
-
-# TODO: add a function to create and clean the csv file;
-# change date format to YY-MM-DD when creating the csv file;
-# trim each entry from starting and ending blank spaces;
 
 
 # app setup
@@ -295,6 +289,60 @@ def edit_email(task_id, template_name):
     return render_template('edit_email.html',
                            email_content=email_content,
                            task=task)
+
+
+# route to edit task
+@app.route('/edit-task/<int:task_id>', methods=['GET', 'POST'])
+def edit_task(task_id):
+    # Get task from database
+    task = Task.query.get_or_404(task_id)
+    current_year = datetime.now().year
+
+    if request.method == 'POST':
+        # Update regular fields
+        task.journal = request.form['journal']
+        task.collection = request.form['collection']
+        task.title = request.form['title']
+        task.type = request.form['type']
+        task.author1 = request.form['author1']
+        task.email1 = request.form['email1']
+        task.author2 = request.form['author2']
+        task.email2 = request.form['email2']
+        task.author3 = request.form['author3']
+        task.email3 = request.form['email3']
+
+        # Update date_invited
+        task.date_invited = datetime(
+            year=int(request.form['date_invited_year']),
+            month=int(request.form['date_invited_month']),
+            day=int(request.form['date_invited_day'])
+        ).date()
+
+        # Update deadline (if field exists)
+        if all(f'deadline_{part}' in request.form for part in ['year', 'month', 'day']):
+            task.deadline = datetime(
+                year=int(request.form['deadline_year']),
+                month=int(request.form['deadline_month']),
+                day=int(request.form['deadline_day'])
+            ).date()
+
+        db.session.commit()
+        return redirect(url_for('index'))
+
+    # Prepare date ranges for dropdowns
+    date_ranges = {
+        'days': list(range(1, 32)),
+        'months': list(range(1, 13)),
+        'invited_years': list(range(current_year - 5, current_year + 1)),
+        'deadline_years': list(range(current_year, current_year + 3))
+    }
+
+    # Set default dates if None
+    default_date = datetime.now().date()
+    date_invited = task.date_invited or default_date
+    deadline = task.deadline or default_date
+
+    return render_template('edit_task.html', task=task, date_invited=date_invited, deadline=deadline, **date_ranges)
 
 
 # runner and debugger

@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<title>Edit Task</title>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+
+    <br><br>
+
+    <h2>Edit Task: <i>"{{ task.title }}"</i></h2>
+    <br>
+    <form method="POST">
+
+        <div>
+            <label>Journal:</label>
+            <input type="text" name="journal" maxlength="120" size='60' value="{{ task.journal }}" required>
+
+            <br><br><br>
+
+            <label>Collection:</label>
+            <input type="text" name="collection" maxlength="120" size='57' value="{{ task.collection }}" required>
+
+            <br><br><br>
+
+            <label>Article Type:</label>
+            <input type="text" name="type" maxlength="120" size='55' value="{{ task.type }}" required>
+
+            <br><br><br>
+            
+            <label>Title:</label>
+            <input type="text" name="title" maxlength="120" size='61' value="{{ task.title }}" required>
+
+            <br><br><br>
+
+            <label>Author 1:</label>
+            <input type="text" name="author1" value="{{ task.author1 }}" required>
+
+            &nbsp;&nbsp;&nbsp;
+
+            <label>Email 1:</label>
+            <input type="text" name="email1" value="{{ task.email1 }}" required>
+
+            <br><br><br>
+
+            <label>Author 2:</label>
+            <input type="text" name="author2" value="{{ task.author2 }}" required>
+
+            &nbsp;&nbsp;&nbsp;
+
+            <label>Email 2:</label>
+            <input type="text" name="email2" value="{{ task.email2 }}" required>
+
+            <br><br><br>
+
+            <label>Author 3:</label>
+            <input type="text" name="author3" value="{{ task.author3 }}" required>
+
+            &nbsp;&nbsp;&nbsp;
+
+            <label>Email 3:</label>
+            <input type="text" name="email3" value="{{ task.email3 }}" required>
+
+        </div>
+
+        <br><br>
+
+        <div>
+            <label>Date Invited:</label>
+            <div>
+                <select name="date_invited_day">
+                    {% for day in days %}
+                    <option value="{{ day }}" {% if day == date_invited.day %}selected{% endif %}>{{ day }}</option>
+                    {% endfor %}
+                </select>
+                <select name="date_invited_month">
+                    {% for month in months %}
+                    <option value="{{ month }}" {% if month == date_invited.month %}selected{% endif %}>{{ month }}</option>
+                    {% endfor %}
+                </select>
+                <select name="date_invited_year">
+                    {% for year in invited_years %}
+                    <option value="{{ year }}" {% if year == date_invited.year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Deadline:</label>
+            <div>
+                <select name="deadline_day">
+                    {% for day in days %}
+                    <option value="{{ day }}" {% if day == deadline.day %}selected{% endif %}>{{ day }}</option>
+                    {% endfor %}
+                </select>
+                <select name="deadline_month">
+                    {% for month in months %}
+                    <option value="{{ month }}" {% if month == deadline.month %}selected{% endif %}>{{ month }}</option>
+                    {% endfor %}
+                </select>
+                <select name="deadline_year">
+                    {% for year in deadline_years %}
+                    <option value="{{ year }}" {% if year == deadline.year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <br><br>
+
+        <button type="submit">Save Changes</button>
+        &nbsp;&nbsp;&nbsp;
+        <a href="{{ url_for('index') }}" class="one">Cancel</a>
+    </form>
+    
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div>
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
