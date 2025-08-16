@@ -20,7 +20,7 @@
             <label>Journal:</label>
             <input type="text" name="journal" maxlength="120" size='60' value="{{ task.journal }}" required>
 
-            <br><br><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;
 
             <label>Collection:</label>
             <input type="text" name="collection" maxlength="120" size='57' value="{{ task.collection }}" required>
@@ -64,8 +64,44 @@
 
             <label>Email 3:</label>
             <input type="text" name="email3" value="{{ task.email3 }}" required>
-
+ 
         </div>
+
+        <br><br>
+
+        <!-- starts select status -->
+        <label>Change Status:</label>
+        <br>
+        <select name="new_status">
+
+            <option value="invited (task open)"
+            {% if task.status == 'invited (task open)' %}selected{% endif %}>invited (task open)</option>
+
+
+            <option value="partial accepted (task open)"
+            {% if task.status == 'partial accepted (task open)' %}selected{% endif %}>
+                partial accepted (task open)
+            </option>
+
+
+            <option value="accepted (task open)"
+            {% if task.status == 'accepted (task open)' %}selected{% endif %}>
+                accepted (task open)
+            </option>
+
+            <option value="done (task closed)"
+            {% if task.status == 'done (task closed)' %}selected{% endif %}>
+                done (task closed)
+            </option>
+
+            <option value="dead (task closed)"
+            {% if task.status == 'dead (task closed)' %}selected{% endif %}>
+                dead (task closed)
+            </option>
+
+        </select>
+
+        <!-- end select status -->
 
         <br><br>
 

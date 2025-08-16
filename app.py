@@ -160,18 +160,18 @@ def delete_article(id):
     return redirect('/')
 
 
-# route to change article request status
-@app.route('/change-status/<int:id>', methods=['GET', 'POST'])
-def change_status(id):
-    task = Task.query.get_or_404(id)
+# route to change task status
+# @app.route('/change-status/<int:id>', methods=['GET', 'POST'])
+# def change_status(id):
+#     task = Task.query.get_or_404(id)
 
-    if request.method == 'POST':
-        # Update status
-        task.status = request.form['new_status']
-        db.session.commit()
-        return redirect('/')
+#     if request.method == 'POST':
+#         # Update status
+#         task.status = request.form['new_status']
+#         db.session.commit()
+#         return redirect('/')
 
-    return render_template('change_status.html', task=task)
+#     return render_template('change_status.html', task=task)
 
 
 # route to export file in excel format
@@ -310,6 +310,7 @@ def edit_task(task_id):
         task.email2 = request.form['email2']
         task.author3 = request.form['author3']
         task.email3 = request.form['email3']
+        task.status = request.form['new_status']
 
         # Update date_invited
         task.date_invited = datetime(
