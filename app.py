@@ -160,20 +160,6 @@ def delete_article(id):
     return redirect('/')
 
 
-# route to change task status
-# @app.route('/change-status/<int:id>', methods=['GET', 'POST'])
-# def change_status(id):
-#     task = Task.query.get_or_404(id)
-
-#     if request.method == 'POST':
-#         # Update status
-#         task.status = request.form['new_status']
-#         db.session.commit()
-#         return redirect('/')
-
-#     return render_template('change_status.html', task=task)
-
-
 # route to export file in excel format
 @app.route('/export-excel')
 def export_excel():
