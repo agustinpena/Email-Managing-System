@@ -83,7 +83,6 @@
                 partial accepted (task open)
             </option>
 
-
             <option value="accepted (task open)"
             {% if task.status == 'accepted (task open)' %}selected{% endif %}>
                 accepted (task open)
@@ -101,9 +100,12 @@
 
         </select>
 
-        <!-- end select status -->
+        <!-- end change status -->
 
-        <br><br>
+        <br><br><br>
+
+        <!-- flexbox div starts -->
+        <div class="flexbox-div">
 
         <div>
             <label>Date Invited:</label>
@@ -148,8 +150,11 @@
                 </select>
             </div>
         </div>
+        </div>
 
-        <br><br>
+        <!-- flexbox div ends -->
+
+        <br><br><br>
 
         <button type="submit">Save Changes</button>
         &nbsp;&nbsp;&nbsp;
