@@ -11,6 +11,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 # create database
 db = SQLAlchemy(app)
+# mail settings
 app.config['MAIL_SERVER'] = 'smtp.mail.ru'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
@@ -37,7 +38,7 @@ class Task(db.Model):
     date_invited = db.Column(db.Date)
     status = db.Column(db.String(30))
     last_change_in_notes = db.Column(db.Date)
-    notes = db.Column(db.String(500))
+    notes = db.Column(db.String(2500))
 
     def __repr__(self) -> str:
         return f"Article Request {self.id}"
@@ -126,7 +127,7 @@ def import_excel_to_db(excel_file):
         return False
 
 
-# route to main page
+# route to main page (/)
 @app.route('/', methods=['POST', 'GET'])  # type: ignore
 def index():
     # add add an csv file with tasks
@@ -202,21 +203,6 @@ def export_excel():
 
     except Exception as e:
         return f"Export failed: {str(e)}", 500
-
-
-# route for notes editing
-@app.route('/edit-notes/<int:id>', methods=['GET', 'POST'])
-def edit_notes(id):
-    task = Task.query.get_or_404(id)
-
-    if request.method == 'POST':
-        notes = request.form['notes'][:500]
-        task.notes = notes
-        task.last_change_in_notes = datetime.now().date()
-        db.session.commit()
-        return redirect('/')
-
-    return render_template('edit_notes.html', task=task)
 
 
 # dictionary with email templates
@@ -313,6 +299,12 @@ def edit_task(task_id):
                 day=int(request.form['deadline_day'])
             ).date()
 
+        # update task notes
+        notes = request.form['notes'][:2500]
+        task.notes = notes
+        task.last_change_in_notes = datetime.now().date()
+
+        # commit to database
         db.session.commit()
         return redirect(url_for('index'))
 
