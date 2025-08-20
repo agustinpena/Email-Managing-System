@@ -10,11 +10,20 @@
     <br>
     <h1><i>Martin's Data Grid</i></h1>
     {% if tasks | length < 1 %}
-    <h3>The grid is not populated. Please add a csv file.</h3>
+    <h3>The grid is not populated. Please add a xlsx file.</h3>
     {% else %}
 
+    <a href="{{ url_for('new_task') }}">
+        <button class="new-task-button">
+            + Add New Task
+        </button>
+    
+    </a>
+    
+    &nbsp;&nbsp;&nbsp;
+
     <a href="{{ url_for('export_excel') }}">
-        <button class="right-button">Export Data to Excel file</button>
+        <button class="export-button">Export Data to Excel file</button>
     </a>
     <br><br>
 

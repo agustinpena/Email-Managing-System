@@ -39,9 +39,14 @@ tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-.right-button{
+.export-button{
     margin-right: 25px;
     float: right;
+}
+
+.new-task-button{
+    margin-left: 25px;
+    float: left;
 }
 
 textarea {

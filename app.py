@@ -223,7 +223,6 @@ def edit_email(task_id):
             body=final_content
         )
         mail.send(msg)
-        flash('Email sent successfully!')  # type: ignore
         return redirect(url_for('index'))
 
     return render_template('edit_email.html',
@@ -290,6 +289,33 @@ def edit_task(task_id):
     deadline = task.deadline or default_date
 
     return render_template('edit_task.html', task=task, date_invited=date_invited, deadline=deadline, **date_ranges)
+
+
+# route to add a new task
+@app.route('/new-task', methods=['GET', 'POST'])
+def new_task():
+    if request.method == 'POST':
+        # Create new task from form data
+        datetime_object = datetime.strptime('1-1-2000', '%d-%m-%Y').date()
+        new_task = Task(
+            journal=request.form['journal'],  # type: ignore
+            collection=request.form['collection'],  # type: ignore
+            type=request.form['type'],  # type: ignore
+            title=request.form['title'],  # type: ignore
+            deadline=datetime_object,  # type: ignore
+            author1=request.form['author1'],    # type: ignore
+            email1=request.form['email1'],  # type: ignore
+            author2=request.form['author2'],  # type: ignore
+            email2=request.form['email2'],  # type: ignore
+            author3=request.form['author3'],  # type: ignore
+            email3=request.form['email3'],  # type: ignore
+            date_invited=datetime_object  # type: ignore
+        )
+        db.session.add(new_task)
+        db.session.commit()
+        return redirect(url_for('index'))
+
+    return render_template('new_task.html')
 
 
 # runner and debugger

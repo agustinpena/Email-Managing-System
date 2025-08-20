@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+<!-- TODO: use drop down menus for collection and article type -->
+{% block head %}
+<title>Add New Task</title>
+{% endblock %}
+
+{% block body %}
+
+<div class="content">
+    <br>
+
+    <h1>Add New Task</h1>
+    <form method="POST">
+        <div>
+            <label>Journal: </label>
+            <input type="text" name="journal" maxlength="60" size='45' required>
+        </div>
+
+        <br>
+
+        <div>
+            <!-- use drop down menus for collection -->
+            <label>Collection: </label>
+            <input type="text" name="collection" maxlength="60" size='43' required>
+        </div>
+
+        <br>
+
+        <div>
+            <!-- use drop down menu for article type -->
+            <label>Article Type: </label>
+            <input type="text" name="type" maxlength="60" size='41' required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Title: </label>
+            <input type="text" name="title" maxlength="60" size='47' required>
+        </div>
+        
+        <br>
+
+        <div>
+            <label>Author 1: </label>
+            <input type="text" name="author1" maxlength="60" size='44' required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Email 1: </label>
+            <input type="text" name="email1" maxlength="60" size='45' required>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Author 2: </label>
+            <input type="text" name="author2" maxlength="60" size='44'>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Email 2: </label>
+            <input type="text" name="email2" maxlength="60" size='45'>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Author 3: </label>
+            <input type="text" name="author3" maxlength="60" size='44'>
+        </div>
+
+        <br>
+
+        <div>
+            <label>Email 3: </label>
+            <input type="text" name="email3" maxlength="60" size='45'>
+        </div>
+
+        <br><br>
+
+        <button type="submit">Create Task</button>
+        &nbsp;&nbsp;&nbsp;
+        <a href="{{ url_for('index') }}">Cancel</a>
+    </form>
+
+</div>
+
+{% endblock %}

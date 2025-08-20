@@ -19,7 +19,7 @@ collections = {
     """On behalf of Profs. Samir Jaber, Chiara Robba, Stefan Schaller & Audrey de Jong, I'm delighted to invite  you to contribute to Intensive Care Medicine's upcoming collection titled \"Perioperative Care in the Intensive Care Unit\".|On behalf of\nProf. Chiara Robba, Deputy Director & Collection Editor\nProf. Stefan Schaller, Section Editor & Collection Editor\nProf. Audrey de Jong, Collection Guest Editor\nProf. Samir Jaber, ICM Editor-in-Chief""",
 
     "obesity":
-    """On behalf of Profs. Samir Jaber, Carol Hodgson, Gonzalo Hernandez & Emma Ridley, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"Obesity in the Intensive Care Unit\".|On behalf of\nProf. Carol Hodgson, Section Editor & Collection Editor\nProf. Gonzalo Hernández, Section Editor & Collection Editor\nProf. Emma Ridley, Collection Guest Editor\nProf. Samir Jaber, ICM Editor-in-Chief"""
+    """On behalf of Profs. Samir Jaber, Carol Hodgson, Gonzalo Hernandez & Emma Ridley, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"Obesity in the Intensive Care Unit\".|On behalf of\nProf. Carol Hodgson, Section Editor & Collection Editor\nProf. Gonzalo Hernandez, Section Editor & Collection Editor\nProf. Emma Ridley, Collection Guest Editor\nProf. Samir Jaber, ICM Editor-in-Chief"""
 }
 
 article_types = {
@@ -57,7 +57,7 @@ def salute(authors):
             counter += 1
     else:
         salutation += 'Dear All,'
-    return salutation
+    return salutation.strip() + '\n'
 
 
 def generate_email_text(task):
@@ -108,4 +108,4 @@ def generate_email_text(task):
     # append signatories
     msg += collections[task_collection].split('|')[1] + '\n\n'
 
-    return msg
+    return '\n' + msg
