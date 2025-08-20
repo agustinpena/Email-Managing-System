@@ -55,7 +55,7 @@ def turn_excel_file_into_df_for_grid(excel_file):
                      'email3', 'date_invited', 'status', 'last_change_in_notes'
                      ]
     # define necessary dataframes
-    df = pd.read_excel(excel_file)
+    df = pd.read_excel(excel_file).fillna('')
     new_df = pd.DataFrame()
     # change original df column names if needed
     for c_title in df.columns:
@@ -94,6 +94,10 @@ def import_excel_to_db(excel_file):
         date_invited_py = df.iloc[i]['date_invited'].to_pydatetime().date()
         last_change_in_notes_py = df.iloc[i]['last_change_in_notes'].to_pydatetime(
         ).date()
+        print('df entry type:', type(df.iloc[i]['email1']))  # debugging
+        email1_str = str(df.iloc[i]['email1']).lower()
+        email2_str = str(df.iloc[i]['email2']).lower()
+        email3_str = str(df.iloc[i]['email3']).lower()
         # Create a new record
         try:
             task = Task(
@@ -103,11 +107,11 @@ def import_excel_to_db(excel_file):
                 title=df.iloc[i]['title'],  # type: ignore
                 deadline=deadline_py,  # type: ignore
                 author1=df.iloc[i]['author1'],  # type: ignore
-                email1=df.iloc[i]['email1'],  # type: ignore
+                email1=email1_str,  # type: ignore
                 author2=df.iloc[i]['author2'],  # type: ignore
-                email2=df.iloc[i]['email2'],  # type: ignore
+                email2=email2_str,  # type: ignore
                 author3=df.iloc[i]['author3'],  # type: ignore
-                email3=df.iloc[i]['email3'],  # type: ignore
+                email3=email3_str,  # type: ignore
                 date_invited=date_invited_py,  # type: ignore
                 status=df.iloc[i]['status'],  # type: ignore
                 last_change_in_notes=last_change_in_notes_py  # type: ignore
@@ -206,7 +210,7 @@ def export_excel():
         return f"Export failed: {str(e)}", 500
 
 
-# route to edit email template
+# route to edit email
 @app.route('/edit-email/<int:task_id>', methods=['GET', 'POST'])
 def edit_email(task_id):
     task = Task.query.get_or_404(task_id)
@@ -244,11 +248,11 @@ def edit_task(task_id):
         task.title = request.form['title']
         task.type = request.form['type']
         task.author1 = request.form['author1']
-        task.email1 = request.form['email1']
+        task.email1 = request.form['email1'].lower()
         task.author2 = request.form['author2']
-        task.email2 = request.form['email2']
+        task.email2 = request.form['email2'].lower()
         task.author3 = request.form['author3']
-        task.email3 = request.form['email3']
+        task.email3 = request.form['email3'].lower()
         task.status = request.form['new_status']
 
         # update date_invited
@@ -279,7 +283,7 @@ def edit_task(task_id):
     date_ranges = {
         'days': list(range(1, 32)),
         'months': list(range(1, 13)),
-        'invited_years': list(range(current_year - 5, current_year + 1)),
+        'invited_years': list(range(current_year - 3, current_year + 1)),
         'deadline_years': list(range(current_year, current_year + 3))
     }
 
@@ -295,8 +299,9 @@ def edit_task(task_id):
 @app.route('/new-task', methods=['GET', 'POST'])
 def new_task():
     if request.method == 'POST':
-        # Create new task from form data
+        # define needed values for the task
         datetime_object = datetime.strptime('1-1-2000', '%d-%m-%Y').date()
+        # Create new task from form data
         new_task = Task(
             journal=request.form['journal'],  # type: ignore
             collection=request.form['collection'],  # type: ignore
@@ -304,12 +309,15 @@ def new_task():
             title=request.form['title'],  # type: ignore
             deadline=datetime_object,  # type: ignore
             author1=request.form['author1'],    # type: ignore
-            email1=request.form['email1'],  # type: ignore
+            email1=request.form['email1'].lower(),  # type: ignore
             author2=request.form['author2'],  # type: ignore
-            email2=request.form['email2'],  # type: ignore
+            email2=request.form['email2'].lower(),  # type: ignore
             author3=request.form['author3'],  # type: ignore
-            email3=request.form['email3'],  # type: ignore
-            date_invited=datetime_object  # type: ignore
+            email3=request.form['email3'].lower(),  # type: ignore
+            date_invited=datetime_object,  # type: ignore
+            status='',  # type: ignore
+            last_change_in_notes=datetime_object,  # type: ignore
+            notes=''  # type: ignore
         )
         db.session.add(new_task)
         db.session.commit()

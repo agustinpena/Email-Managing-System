@@ -64,8 +64,8 @@ def generate_email_text(task):
     msg = ''
     article_type = task.type.lower()
     article_title = task.title.strip().title()
-    # TODO: in deadline, month should be displayed with letters
-    deadline = str(task.deadline)
+    date_format = '%d %B %Y'
+    deadline = task.deadline.strftime(date_format)
     # determine the task collection according to name
     cad = set(task.collection.lower().strip().split())
     if {'standard', 'care'} <= cad:
