@@ -12,11 +12,13 @@
     <b>Recipient: </b><i>{{ task.email1 }}</i>
     <br><br><br>
     <form method="POST">
-        <textarea name="email_content" rows="20" style="width:60%">{{ email_content }}</textarea>
-        <br><br>
+        <textarea name="email_content" rows="33" style="width:80%">
+            {{ email_content }}
+        </textarea>
+        <br><br><br>
         <button type="submit">Send Email</button>
-        &nbsp;&nbsp;
-        <a class='one' href="{{ url_for('index') }}">Cancel</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="{{ url_for('index') }}">Cancel</a>
     </form>
 
 </div>

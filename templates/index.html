@@ -42,7 +42,7 @@
             {% for task in tasks %}
             <tr>
                 <td>
-                    <a class='one' href="{{ url_for('select_template', task_id=task.id) }}">Draft Email</a><br>
+                    <a class='one' href="{{ url_for('edit_email', task_id=task.id) }}">Draft Email</a><br>
                     <a class='two' href="{{ url_for('edit_task', task_id=task.id) }}">Edit Task</a><br>
                     <a class='one' href="{{ url_for('confirm_delete', id=task.id) }}">Delete Row</a>
                 </td>

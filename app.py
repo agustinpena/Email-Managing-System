@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, send_file, url_for
 from flask_sqlalchemy import SQLAlchemy
+from email_template import generate_email_text
 from flask_mail import Mail, Message
 from datetime import datetime
 from io import BytesIO
@@ -205,59 +206,26 @@ def export_excel():
         return f"Export failed: {str(e)}", 500
 
 
-# dictionary with email templates
-EMAIL_TEMPLATES = {
-    "template1": """Dear {title} {last_name},
-
-We're about to publish the attached article "{original_title}" from Dr {original_author} and we'd like to invite you to draft a {article_type} on the topic of {article_title}.
-
-Thank you,
-Kind regards,
-Martin""",
-
-    "template2": """Hello {title} {last_name},
-
-We're excited to share the article "{original_title}" by Dr {original_author} and would appreciate your input as a {article_type} contributor on "{article_title}".
-
-Best wishes,
-Martin"""
-}
-
-
-# route to select email template
-@app.route('/draft-email/<int:task_id>')
-def select_template(task_id):
-    task = Task.query.get_or_404(task_id)
-    return render_template('select_template.html', task=task)
-
-
 # route to edit email template
-@app.route('/edit-email/<int:task_id>/<template_name>', methods=['GET', 'POST'])
-def edit_email(task_id, template_name):
+@app.route('/edit-email/<int:task_id>', methods=['GET', 'POST'])
+def edit_email(task_id):
     task = Task.query.get_or_404(task_id)
-
-    # Prepare template variables
-    template_vars = {
-        'title': 'Dr.',
-        'last_name': task.author1.split()[-1],
-        'original_title': task.title,
-        'original_author': task.author1,
-        'article_type': task.type,
-        'article_title': task.title
-    }
+    # generate email content
+    email_content = generate_email_text(task)
 
     if request.method == 'POST':
-        # Process the edited email
+        # send the email
+        final_content = request.form['email_content']
         msg = Message(
-            'Martin\'s Article Request',
+            subject=f"ICM Article Request {task.title}",
             sender='correo.x@mail.ru',
             recipients=[task.email1],
-            body=request.form['email_content']
+            body=final_content
         )
         mail.send(msg)
-        return redirect('/')
-    # Get the selected template and fill in variables
-    email_content = EMAIL_TEMPLATES[template_name].format(**template_vars)
+        flash('Email sent successfully!')  # type: ignore
+        return redirect(url_for('index'))
+
     return render_template('edit_email.html',
                            email_content=email_content,
                            task=task)
@@ -266,12 +234,12 @@ def edit_email(task_id, template_name):
 # route to edit task
 @app.route('/edit-task/<int:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id):
-    # Get task from database
+    # get task from database
     task = Task.query.get_or_404(task_id)
     current_year = datetime.now().year
 
     if request.method == 'POST':
-        # Update regular fields
+        # update regular fields
         task.journal = request.form['journal']
         task.collection = request.form['collection']
         task.title = request.form['title']
@@ -284,14 +252,14 @@ def edit_task(task_id):
         task.email3 = request.form['email3']
         task.status = request.form['new_status']
 
-        # Update date_invited
+        # update date_invited
         task.date_invited = datetime(
             year=int(request.form['date_invited_year']),
             month=int(request.form['date_invited_month']),
             day=int(request.form['date_invited_day'])
         ).date()
 
-        # Update deadline (if field exists)
+        # update deadline (if field exists)
         if all(f'deadline_{part}' in request.form for part in ['year', 'month', 'day']):
             task.deadline = datetime(
                 year=int(request.form['deadline_year']),
