@@ -272,8 +272,9 @@ def edit_task(task_id):
 
         # update task notes
         notes = request.form['notes'][:2500]
-        task.notes = notes
-        task.last_change_in_notes = datetime.now().date()
+        if notes != task.notes:
+            task.notes = notes
+            task.last_change_in_notes = datetime.now().date()
 
         # commit to database
         db.session.commit()
