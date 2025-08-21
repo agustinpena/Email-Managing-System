@@ -40,7 +40,8 @@ article_types = {
 }
 
 
-# salute function, takes in a list of authors
+# takes list of authors and creates
+# letter salutation
 def salute(authors):
     salutation = '\n'
     counter = 0
@@ -60,10 +61,20 @@ def salute(authors):
     return salutation.strip() + '\n'
 
 
+# capitalizes first letter of each word
+# in a sentence but leaves every other letter untouched
+def first_letter_to_cap(cad):
+    words = cad.split()
+    phrase = ''
+    for word in words:
+        phrase += word[0].upper() + word[1:] + ' '
+    return phrase.rstrip()
+
+
 def generate_email_text(task):
     msg = ''
     article_type = task.type.lower()
-    article_title = task.title.strip().title()
+    article_title = first_letter_to_cap(task.title.strip())
     date_format = '%d %B %Y'
     deadline = task.deadline.strftime(date_format)
     # determine the task collection according to name
@@ -98,7 +109,7 @@ def generate_email_text(task):
         "You may refine the title as you see fit.\n\n"
     msg += cad
     # append submission guidelines
-    msg += article_types[article_type] + "\n"
+    msg += article_types[article_type] + "\n\n"
     # append text with deadline
     msg += "Submission would be due by " + deadline + \
         ", but we can accommodate for some flexibility.\n\n"

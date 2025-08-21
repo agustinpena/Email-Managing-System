@@ -22,8 +22,30 @@
 
             &nbsp;&nbsp;&nbsp;&nbsp;
 
+
             <label>Collection:</label>
-            <input type="text" name="collection" maxlength="120" size='57' value="{{ task.collection }}" required>
+            <select name="collection">
+                <option value="Standard of Care" {% if task.collection == 'Standard of Care' %}selected{% endif %}>
+                    Standard of Care
+                </option>
+
+
+                <option value="The Brain in the Line of Fire: Neuroprotection and Critical Illness" {% if task.collection == 'The Brain in the Line of Fire: Neuroprotection and Critical Illness' %}selected{% endif %}>
+                    The Brain in the Line of Fire: Neuroprotection and Critical Illness
+                </option>
+
+                <option value="Physiology in Critical Illness" {% if task.collection == 'Physiology in Critical Illness' %}selected{% endif %}>
+                    Physiology in Critical Illness
+                </option>
+
+                <option value="Perioperative Care in the Intensive Care Unit" {% if task.collection == 'Perioperative Care in the Intensive Care Unit' %}selected{% endif %}>
+                    Perioperative Care in the Intensive Care Unit
+                </option>
+
+                <option value="Obesity in the Intensive Care Unit" {% if task.collection == 'Obesity in the Intensive Care Unit' %}selected{% endif %}>
+                    Obesity in the Intensive Care Unit
+                </option>
+            </select>
 
             <br><br><br>
 
@@ -31,9 +53,12 @@
             <input type="text" name="title" maxlength="120" size='66' value="{{ task.title }}" required>
 
             &nbsp;&nbsp;&nbsp;
-            
-            <label>Article Type:</label>
-            <input type="text" name="type" maxlength="120" size='22' value="{{ task.type }}" required>
+
+        <label>Article Type:</label>
+        <select name="type">
+            <option value="Review Article" {% if task.type == 'Review Article' %}selected{% endif %}>Review Article</option>
+            <option value="Short Editorial" {% if task.type == 'Short Editorial' %}selected{% endif %}>Short Editorial</option>
+        </select>
 
             <br><br><br>
 
@@ -185,20 +210,4 @@
 </div>
 
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
