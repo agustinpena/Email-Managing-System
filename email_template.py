@@ -100,7 +100,7 @@ def generate_email_text(task):
         authors.append(task.author3.strip())
 
     # append salute to authors
-    msg += salute(authors) + '\n\n'
+    msg += salute(authors) + '\n'
     # append first paragraph
     msg += collections[task_collection].split('|')[0] + ' '
     # append text common to all emails

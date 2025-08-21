@@ -11,13 +11,15 @@
     <h1><i>Martin's Data Grid</i></h1>
     {% if tasks | length < 1 %}
     <h2>The grid is not populated.</h2>
-    <h3>Please add a new task manually or upload an xlsx file.</h3>
-    
+    <h3>Please add a new task manually:</h3>
+
         <a href="{{ url_for('new_task') }}">
             <button>
                 + Add New Task
             </button>
         </a>
+
+    <h3>Or upload an xlsx file:</h3>
 
     {% else %}
 
@@ -66,28 +68,25 @@
                 <td>{{task.collection}}</td>
                 <td>{{task.type}}</td>
                 <td>{{task.title}}</td>
-                <td>{{task.deadline}}</td>
+                <td>{{task.deadline.strftime('%d/%m/%y')}}</td>
                 <td>{{task.author1}}</td>
                 <td>{{task.email1}}</td>
                 <td>{{task.author2}}</td>
                 <td>{{task.email2}}</td>
                 <td>{{task.author3}}</td>
                 <td>{{task.email3}}</td>
-                <td>{{task.date_invited}}</td>
+                <td>{{task.date_invited.strftime('%d/%m/%y')}}</td>
                 <td>{{task.status}}</td>
-                <td>{{task.last_change_in_notes}}</td>
+                <td>{{task.last_change_in_notes.strftime('%d/%m/%y')}}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-
+    <br><br>
     {% endif %}
-
 <!-- table ends  -->
 
 <!-- starts upload a csv file button & export to excel button -->
-    <br><br>
-
         <form style="display: inline-block;" method="post" enctype="multipart/form-data">
             <input type="file" name="file" accept=".xlsx" required>
             <button type="submit">Upload Excel file</button>

@@ -54,9 +54,12 @@ def turn_excel_file_into_df_for_grid(excel_file):
                      'author1', 'email1', 'author2', 'email2', 'author3',
                      'email3', 'date_invited', 'status', 'last_change_in_notes'
                      ]
-    # define necessary dataframes
+    # generate and clean dataframe
+    # change NaN values for an empty string
     df = pd.read_excel(excel_file).fillna('')
     new_df = pd.DataFrame()
+    # put an empty string in blank-spaces-only cells
+    new_df.replace(r'^\s*$', '', regex=True, inplace=True)
     # change original df column names if needed
     for c_title in df.columns:
         for r_col in right_columns:
@@ -92,9 +95,7 @@ def import_excel_to_db(excel_file):
         # convert pandas timestamps to python datetime format
         deadline_py = df.iloc[i]['deadline'].to_pydatetime().date()
         date_invited_py = df.iloc[i]['date_invited'].to_pydatetime().date()
-        last_change_in_notes_py = df.iloc[i]['last_change_in_notes'].to_pydatetime(
-        ).date()
-        print('df entry type:', type(df.iloc[i]['email1']))  # debugging
+        last_change_in_notes_py = datetime.strptime('2000-01-01', '%Y-%m-%d')
         email1_str = str(df.iloc[i]['email1']).lower()
         email2_str = str(df.iloc[i]['email2']).lower()
         email3_str = str(df.iloc[i]['email3']).lower()
@@ -114,7 +115,8 @@ def import_excel_to_db(excel_file):
                 email3=email3_str,  # type: ignore
                 date_invited=date_invited_py,  # type: ignore
                 status=df.iloc[i]['status'],  # type: ignore
-                last_change_in_notes=last_change_in_notes_py  # type: ignore
+                last_change_in_notes=last_change_in_notes_py,  # type: ignore
+                notes=''  # type: ignore
             )
 
             db.session.add(task)
@@ -240,6 +242,7 @@ def edit_task(task_id):
     # get task from database
     task = Task.query.get_or_404(task_id)
     current_year = datetime.now().year
+    current_date_str = datetime.now().date().strftime('%d/%m/%y')
 
     if request.method == 'POST':
         # update regular fields
@@ -253,7 +256,9 @@ def edit_task(task_id):
         task.email2 = request.form['email2'].lower()
         task.author3 = request.form['author3']
         task.email3 = request.form['email3'].lower()
-        task.status = request.form['new_status']
+        new_status = request.form['new_status']
+        current_status = task.status
+        task.status = new_status
 
         # update date_invited
         task.date_invited = datetime(
@@ -270,10 +275,18 @@ def edit_task(task_id):
                 day=int(request.form['deadline_day'])
             ).date()
 
-        # update task notes
-        notes = request.form['notes'][:2500]
-        if notes != task.notes:
-            task.notes = notes
+        # acquire notes from form
+        new_notes = request.form['notes'][:2500]
+
+        # update notes if theres a STATUS change
+        if new_status != current_status:
+            log_entry = f"[{current_date_str}] -> STATUS CHANGED TO: {new_status}"
+            new_notes = log_entry + '\n' + new_notes
+
+        # update notes if some notes are manually typed
+        if new_notes != task.notes:
+            task.notes = new_notes
+            # update last_change_in_notes
             task.last_change_in_notes = datetime.now().date()
 
         # commit to database
