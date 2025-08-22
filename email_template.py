@@ -75,7 +75,7 @@ def generate_email_text(task):
     msg = ''
     article_type = task.type.lower()
     article_title = first_letter_to_cap(task.title.strip())
-    date_format = '%d %B %Y'
+    date_format = '%d/%m/%Y'
     deadline = task.deadline.strftime(date_format)
     # determine the task collection according to name
     cad = set(task.collection.lower().strip().split())
@@ -117,6 +117,6 @@ def generate_email_text(task):
     msg += "Kindly confirm your participation within seven days, and always feel free to reach out to the Editorial office for any questions or requests.\n\n"
     msg += "Thank you for considering this invitation.\n\nKind regards,\nICM Editorial Office\n\n"
     # append signatories
-    msg += collections[task_collection].split('|')[1] + '\n\n'
+    msg += collections[task_collection].split('|')[1] + '\n'
 
     return '\n' + msg

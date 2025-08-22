@@ -54,11 +54,11 @@
 
             &nbsp;&nbsp;&nbsp;
 
-        <label>Article Type:</label>
-        <select name="type">
-            <option value="Review Article" {% if task.type == 'Review Article' %}selected{% endif %}>Review Article</option>
-            <option value="Short Editorial" {% if task.type == 'Short Editorial' %}selected{% endif %}>Short Editorial</option>
-        </select>
+            <label>Article Type:</label>
+            <select name="type">
+                <option value="Review Article" {% if task.type == 'Review Article' %}selected{% endif %}>Review Article</option>
+                <option value="Short Editorial" {% if task.type == 'Short Editorial' %}selected{% endif %}>Short Editorial</option>
+            </select>
 
             <br><br><br>
 
@@ -132,57 +132,59 @@
         <!-- flexbox div starts -->
         <div class="flexbox-div">
 
-        <div>
-            <label>Date Invited:</label>
             <div>
-                <select name="date_invited_day">
-                    {% for day in days %}
-                    <option value="{{ day }}" {% if day == date_invited.day %}selected{% endif %}>{{ day }}</option>
-                    {% endfor %}
-                </select>
-                <select name="date_invited_month">
-                    {% for month in months %}
-                    <option value="{{ month }}" {% if month == date_invited.month %}selected{% endif %}>{{ month }}</option>
-                    {% endfor %}
-                </select>
-                <select name="date_invited_year">
-                    {% for year in invited_years %}
-                    <option value="{{ year }}" {% if year == date_invited.year %}selected{% endif %}>{{ year }}</option>
-                    {% endfor %}
-                </select>
+                <label>Date Invited:</label>
+                <div>
+                    <select name="date_invited_day">
+                        {% for day in days %}
+                        <option value="{{ day }}" {% if day == date_invited.day %}selected{% endif %}>{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="date_invited_month">
+                        {% for month in months %}
+                        <option value="{{ month }}" {% if month == date_invited.month %}selected{% endif %}>{{ month }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="date_invited_year">
+                        {% for year in invited_years %}
+                        <option value="{{ year }}" {% if year == date_invited.year %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <br>
+
+            <div>
+                <label>Deadline:</label>
+                <div>
+                    <select name="deadline_day">
+                        {% for day in days %}
+                        <option value="{{ day }}" {% if day == deadline.day %}selected{% endif %}>{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="deadline_month">
+                        {% for month in months %}
+                        <option value="{{ month }}" {% if month == deadline.month %}selected{% endif %}>{{ month }}</option>
+                        {% endfor %}
+                    </select>
+                    <select name="deadline_year">
+                        {% for year in deadline_years %}
+                        <option value="{{ year }}" {% if year == deadline.year %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
         </div>
-
-        <br>
-
-        <div>
-            <label>Deadline:</label>
-            <div>
-                <select name="deadline_day">
-                    {% for day in days %}
-                    <option value="{{ day }}" {% if day == deadline.day %}selected{% endif %}>{{ day }}</option>
-                    {% endfor %}
-                </select>
-                <select name="deadline_month">
-                    {% for month in months %}
-                    <option value="{{ month }}" {% if month == deadline.month %}selected{% endif %}>{{ month }}</option>
-                    {% endfor %}
-                </select>
-                <select name="deadline_year">
-                    {% for year in deadline_years %}
-                    <option value="{{ year }}" {% if year == deadline.year %}selected{% endif %}>{{ year }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        </div>
-
-        <br><br><br>
-
         <!-- flexbox div ends  -->
-        <!-- starts edit notes -->
 
-        <label>Edit Notes</label>
+        <br><br>
+
+        <!-- starts edit notes -->
+        <label>
+            Edit Notes <br><i>(most recent change is at the top)</i>
+        </label>
+        
 
         <br>
 
