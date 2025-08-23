@@ -9,9 +9,22 @@
 <div class="content">
     <br>
     <h2>Edit Email for <i>{{ task.title }}</i></h2>
-    <b>Recipient: </b><i>{{ task.email1 }}</i>
-    <br><br><br>
     <form method="POST">
+        <div>
+            <label>Subject:</label>
+            <input type="text" name="subject" maxlength="120" size='77' value="[{{ task.journal }}] Invitation to contribute - {{task.collection}}" required>
+        </div>
+        <br>
+        <div>
+            <label>To:</label>
+            <input type="email" name="recipient" maxlength="120" size='81'  value="{{ task.email1 }}" required>
+        </div>
+        <br>
+        <div>
+            <label>CC (comma-separated):</label>
+            <input type="text" name="cc" maxlength="120" size='65'  value="{{task.email2}}, {{task.email3}}">
+        </div>
+        <br>
         <textarea name="email_content" rows="33" style="width:80%">
             {{ email_content }}
         </textarea>
@@ -20,7 +33,6 @@
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a href="{{ url_for('index') }}">Cancel</a>
     </form>
-
 </div>
 
 {% endblock %}

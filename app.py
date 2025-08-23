@@ -220,16 +220,37 @@ def edit_email(task_id):
     email_content = generate_email_text(task)
 
     if request.method == 'POST':
-        # send the email
-        final_content = request.form['email_content']
-        msg = Message(
-            subject=f"ICM Article Request {task.title}",
-            sender='correo.x@mail.ru',
-            recipients=[task.email1],
-            body=final_content
-        )
+        # generate email
+        _subject = request.form['subject']
+        _sender = 'correo.x@mail.ru'
+        _body = request.form['email_content']
+
+        msg = Message(subject=_subject, sender=_sender,
+                      recipients=[request.form['recipient']],
+                      body=_body)
+
+        # add cc recipients if provided
+        if request.form['cc']:
+            msg.cc = [email.strip() for email in request.form['cc'].split(',')]
+
+        # send email
         mail.send(msg)
-        return redirect(url_for('index'))
+        # generate log entry for notes
+        current_date_str = datetime.now().date().strftime('%d/%m/%y')
+
+        all_recipients = [request.form['recipient']] + \
+            [email.strip() for email in request.form['cc'].split(',')]
+
+        log_entry = f'[{current_date_str}] -> EMAIL SENT TO: '
+        for recipient in all_recipients:
+            if recipient.strip() != '':
+                log_entry += recipient + ', '
+        log_entry = log_entry.rstrip()[:-1]
+        # insert log entry into notes
+        task.notes = log_entry + '\n' + task.notes
+        db.session.commit()
+
+        return redirect(url_for('index', message='Email sent successfully!'))
 
     return render_template('edit_email.html',
                            email_content=email_content,

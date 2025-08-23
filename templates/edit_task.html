@@ -22,13 +22,11 @@
 
             &nbsp;&nbsp;&nbsp;&nbsp;
 
-
             <label>Collection:</label>
             <select name="collection">
                 <option value="Standard of Care" {% if task.collection == 'Standard of Care' %}selected{% endif %}>
                     Standard of Care
                 </option>
-
 
                 <option value="The Brain in the Line of Fire: Neuroprotection and Critical Illness" {% if task.collection == 'The Brain in the Line of Fire: Neuroprotection and Critical Illness' %}selected{% endif %}>
                     The Brain in the Line of Fire: Neuroprotection and Critical Illness
@@ -182,13 +180,12 @@
 
         <!-- starts edit notes -->
         <label>
-            Edit Notes <br><i>(most recent change is at the top)</i>
+            Edit Notes <br><i>(most recent entry is at the top)</i>
         </label>
         
-
         <br>
 
-        <textarea name="notes" maxlength="2500" rows="5" style="width:50%">{{ task.notes or '' }}</textarea>
+        <textarea name="notes" maxlength="2500" rows="5" style="width:60%">{{ task.notes or '' }}</textarea>
 
         <!-- edit notes ends -->
 
