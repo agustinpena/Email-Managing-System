@@ -7,6 +7,10 @@ from io import BytesIO
 import pandas as pd
 
 
+# TODO 1. bug: notes do not convert properly when exporting to excel;
+# conversion process only converts raw strings, not escape sequences
+
+
 # app setup
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -120,7 +124,6 @@ def import_excel_to_db(excel_file):
             )
 
             db.session.add(task)
-            print(f'task {i} added to database commit')  # debugging
 
         except Exception as e:
             print(f"Error adding to commit => task {i}: {e}")
@@ -190,7 +193,8 @@ def export_excel():
             'Date Invited': task.date_invited,
             'Status': task.status,
             'Last Change in Notes': task.last_change_in_notes,
-            'Notes': task.notes
+            # debug the line below
+            'Notes': task.notes.replace('\r', '').replace('\n', 'CHAR(10)')
             # Add all other fields you want to export
         } for task in tasks]
 
