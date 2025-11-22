@@ -40,8 +40,7 @@ article_types = {
 }
 
 
-# takes list of authors and creates
-# letter salutation
+# creates letter salutation from a list of authors
 def salute(authors):
     salutation = '\n'
     counter = 0
@@ -61,14 +60,23 @@ def salute(authors):
     return salutation.strip() + '\n'
 
 
-# capitalizes first letter of each word
-# in a sentence but leaves every other letter untouched
+# capitalizes first letter of each word in a
+# sentence but leaves all other letters untouched
 def first_letter_to_cap(cad):
     words = cad.split()
     phrase = ''
     for word in words:
         phrase += word[0].upper() + word[1:] + ' '
     return phrase.rstrip()
+
+
+def create_list_of_authors(task):
+    authors = [task.author1.strip()]
+    if task.author2 != None and task.author2.replace(' ', '') != '':
+        authors.append(task.author2.strip())
+    if task.author3 != None and task.author3.replace(' ', '') != '':
+        authors.append(task.author3.strip())
+    return authors
 
 
 def generate_email_text(task):
@@ -93,12 +101,7 @@ def generate_email_text(task):
         task_collection = 'general'
 
     # create list of authors
-    authors = [task.author1.strip()]
-    if task.author2 != None and task.author2.replace(' ', '') != '':
-        authors.append(task.author2.strip())
-    if task.author3 != None and task.author3.replace(' ', '') != '':
-        authors.append(task.author3.strip())
-
+    authors = create_list_of_authors(task)
     # append salute to authors
     msg += salute(authors) + '\n'
     # append first paragraph
@@ -120,3 +123,16 @@ def generate_email_text(task):
     msg += collections[task_collection].split('|')[1] + '\n'
 
     return '\n' + msg
+
+
+def generate_FOLLOW_UP_email_text(task):
+    msg = '\n'
+    # get info from the task
+    article_type = task.type.lower()
+    article_title = first_letter_to_cap(task.title.strip())
+    authors = create_list_of_authors(task)
+    # create email text
+    msg += salute(authors) + '\n\n' + "I hope you are doing well. I'm writing to kindly follow up on our earlier invitation to contribute to the " + article_type + " on " + article_title + \
+        " for ICM.\nWould you still be interested to draft such a piece? Of course, the Editorial Office would be happy to assist you in inviting your co-authors.\n\nFeel free to reach out to us for any question!\n\nKind regards,\nMartin"
+
+    return msg

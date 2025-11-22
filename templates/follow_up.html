@@ -1,24 +1,27 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Edit Email</title>
+<title>Edit Reminder Email</title>
 {% endblock %}
 
 {% block body %}
-
 <div class="content">
     <br>
-    <h2>Edit Email for: <i>{{ task.title }}</i></h2>
+    <h2>Edit Reminder Email for: <i>{{ task.title }}</i></h2>
+
     <form method="POST">
         <div>
             <label>Subject:</label>
-            <input type="text" name="subject" maxlength="120" size='77' value="[{{ task.journal }}] Invitation to contribute - {{task.collection}}" required>
+            <input type="text" name="subject" maxlength="120" size='77' value="{{ subject }}" required>
         </div>
+
         <br>
+
         <div>
             <label>To:</label>
-            <input type="email" name="recipient" maxlength="120" size='81'  value="{{ task.email1 }}" required>
+            <input type="email" name="recipient" maxlength="120" size='81' value="{{ recipient }}" required>
         </div>
+
         <br>
         {% if task.email2 or task.email3 %}
         <div>
@@ -26,15 +29,17 @@
             <input type="text" name="cc" maxlength="120" size='65'  value="{% if task.email2 %}{{ task.email2 }}{% endif %}{% if task.email3 %}{% if task.email2 %}, {% endif %}{{ task.email3 }}{% endif %}">
         </div>
         {% endif %}
+ 
         <br>
-        <textarea name="email_content" rows="33" style="width:80%">
-            {{ email_content }}
-        </textarea>
+
+        <textarea name="email_content" rows="20" style="width:80%">{{ email_content }}</textarea>
+
         <br><br><br>
-        <button type="submit" class="btn">Send Email</button>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="{{ url_for('index') }}" class="one" >Cancel</a>
+
+        <button type="submit" class="btn">Send Follow-up</button>
+        &nbsp;&nbsp;&nbsp;
+        <a href="{{ url_for('index') }}" class="one">Cancel</a>
+
     </form>
 </div>
-
 {% endblock %}

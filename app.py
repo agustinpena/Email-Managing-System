@@ -1,14 +1,17 @@
 from flask import Flask, render_template, request, redirect, send_file, url_for
 from flask_sqlalchemy import SQLAlchemy
-from email_template import generate_email_text
+from email_template import generate_email_text, generate_FOLLOW_UP_email_text
 from flask_mail import Mail, Message
 from datetime import datetime
 from io import BytesIO
 import pandas as pd
 
 
-# TODO 1. bug: notes do not convert properly when exporting to excel;
+# TODO bugs to fix:
+# 1. NOTES do not convert properly when exporting to excel;
 # conversion process only converts raw strings, not escape sequences
+# 2. When a non-valid xlsx file is loaded, the program should give a
+# warning instead of crashing.
 
 
 # app setup
@@ -140,20 +143,28 @@ def import_excel_to_db(excel_file):
 # route to main page (/)
 @app.route('/', methods=['POST', 'GET'])  # type: ignore
 def index():
-    # add add an csv file with tasks
     if request.method == 'POST':
         my_file = request.files.get('file')
         if not my_file or my_file.filename == '':
-            return ('No file selected!', 400)
+            return 'No file selected!', 400
 
-        if my_file.filename.endswith('.xlsx'):  # type: ignore
-            import_excel_to_db(my_file)
-            return redirect('/')
+        if not my_file.filename.lower().endswith(('.xlsx', '.xls')):
+            return 'Only Excel files are allowed!', 400
 
-    # see all current tasks
-    else:
-        tasks = Task.query.all()
-        return render_template('index.html', tasks=tasks)
+        try:
+            # Use your existing function to import the Excel file
+            success = import_excel_to_db(my_file)
+            if success:
+                return redirect(url_for('index', message='Excel file imported successfully!'))
+            else:
+                return 'Error importing Excel file to database', 400
+
+        except Exception as e:
+            return f'Error processing Excel file: {str(e)}', 400
+
+    # GET request - show the main page
+    tasks = Task.query.all()
+    return render_template('index.html', tasks=tasks)
 
 
 # route to confirm deletion
@@ -322,8 +333,8 @@ def edit_task(task_id):
     date_ranges = {
         'days': list(range(1, 32)),
         'months': list(range(1, 13)),
-        'invited_years': list(range(current_year - 3, current_year + 1)),
-        'deadline_years': list(range(current_year, current_year + 3))
+        'invited_years': list(range(current_year-1, current_year + 3)),
+        'deadline_years': list(range(current_year-1, current_year + 3))
     }
 
     # Set default dates if None
@@ -363,6 +374,34 @@ def new_task():
         return redirect(url_for('index'))
 
     return render_template('new_task.html')
+
+
+# route to send a reminder email
+# TODO: as it is, it immediately sends the email;
+# create an edit-follow-up email page
+@app.route('/follow-up/<int:task_id>')
+def follow_up(task_id):
+    task = Task.query.get_or_404(task_id)
+
+    # Generate follow-up email content
+    follow_up_template = generate_FOLLOW_UP_email_text(task)
+    # Send the follow-up email
+    if request.method == 'POST':
+        # Send the edited follow-up email
+        msg = Message(
+            subject=request.form['subject'],
+            sender='j.agustin.pena.a@gmail.com',
+            recipients=[request.form['recipient']],
+            body=request.form['email_content']
+        )
+        mail.send(msg)
+        return redirect(url_for('index', message='Follow-up email sent!'))
+
+    return render_template('follow_up.html',
+                           task=task,
+                           subject=f"Follow-up: {task.title}",
+                           recipient=task.email1,
+                           email_content=follow_up_template)
 
 
 # runner and debugger

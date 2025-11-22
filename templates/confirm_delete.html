@@ -13,11 +13,11 @@
 
   <form style="display: inline-block; margin-right: 30px;"
   method="POST" action="{{ url_for('delete_article', id=task.id) }}">
-    <button type="submit">Confirm Delete</button>
+    <button type="submit" class="btn">Confirm Delete</button>
   </form>
 
   <form style="display: inline-block;" action="{{ url_for('index') }}">
-    <button type="submit">Cancel</button>
+    <button type="submit" class="btn">Cancel</button>
   </form>
 
 </div>

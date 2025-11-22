@@ -1,7 +1,38 @@
 body {
-    /* background-color: #4f5044; */
-    background-color: wheat;
-    /* background-color: rgb(122, 93, 38); */
+    background-color: #2d3b55;
+    color: #fff9c4
+}
+
+/* COLORS
+==========
+Soft Navy Blue (Primary)
+--soft-navy: #2d3b55;
+
+Pale Banana Yellow (Accent)
+--pale-yellow: #fff9c4;
+
+Warm Gray (Neutral)
+--warm-gray: #4a5568; */
+
+.main-title-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.main-page-logo {
+    position: absolute;
+    left: 23%;
+    transform: translateX(-50%);
+    height: auto; /* Adjust as needed */
+    width: 12%;
+}
+
+.main-title {
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
 }
 
 .content {
@@ -9,18 +40,30 @@ body {
     text-align: center;
 }
 
-a.one:link {color: #006d4c;}
-a.one:visited {color: #006d4c;}
+a.one:link {color: #e0fd97;}
+a.one:visited {color: #e0fd97;}
 
-a.two:link {color: #411900;}
-a.two:visited {color: #411900;}
+a.two:link {color: #65ee8e;}
+a.two:visited {color: #65ee8e;}
 
 table {
-    background-color: white;
+    background-color: #2d3b55;
     border-collapse: collapse;
     width: 98%;
     margin-left: auto;
     margin-right: auto;
+    color: #fff9c4
+}
+
+tr:nth-child(even) {
+    /* background-color: #006992; */
+    background-color: #4a5568;
+}
+
+th {
+    background-color: #026186;
+    font-weight: bold;
+    text-align: center;
 }
 
 th, td {
@@ -29,24 +72,20 @@ th, td {
     padding: 8px;
 }
 
-th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-    text-align: center;
-}
-
-tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
 .export-button{
     margin-right: 25px;
     float: right;
+    border-radius: 5px;
 }
 
 .new-task-button{
-    margin-left: 25px;
+    margin-left: 15px;
     float: left;
+    border-radius: 5px;
+}
+
+.btn {
+    border-radius: 5px;
 }
 
 textarea {

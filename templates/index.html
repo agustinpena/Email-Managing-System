@@ -1,20 +1,24 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Data Grid</title>
+<title>TFCU | ScholarTrack</title>
 {% endblock %}
 
 {% block body %}
 
 <div class="content">
+    <div class="main-title-container">
+        <img src="static/scholar_track.png" alt="Scholar Track" class="main-page-logo">
+        <div class="main-title"><h1><i>Task Flow Control Unit</i></h1></div>
+    </div>
+
     <br>
-    <h1><i>Martin's Data Grid</i></h1>
     {% if tasks | length < 1 %}
     <h2>The grid is not populated.</h2>
     <h3>Please add a new task manually:</h3>
 
         <a href="{{ url_for('new_task') }}">
-            <button>
+            <button class="btn">
                 + Add New Task
             </button>
         </a>
@@ -53,7 +57,7 @@
                 <th>Email 3</th>
                 <th>Date Invited</th>
                 <th>Status</th>
-                <th>Date from Latest Change in the Notes</th>
+                <th>Date of Latest<br>Change in<br>the Notes</th>
             </tr>
         </thead>
         <tbody>
@@ -62,7 +66,8 @@
                 <td>
                     <a class='one' href="{{ url_for('edit_email', task_id=task.id) }}">Draft Email</a><br>
                     <a class='two' href="{{ url_for('edit_task', task_id=task.id) }}">Edit Task</a><br>
-                    <a class='one' href="{{ url_for('confirm_delete', id=task.id) }}">Delete Row</a>
+                    <a class='one' href="{{ url_for('confirm_delete', id=task.id) }}">Delete Row</a><br>
+                    <a class='two' href="{{ url_for('follow_up', task_id=task.id) }}">Send Reminder</a>
                 </td>
                 <td>{{task.journal}}</td>
                 <td>{{task.collection}}</td>
@@ -86,10 +91,10 @@
     {% endif %}
 <!-- table ends  -->
 
-<!-- starts upload a csv file button & export to excel button -->
+<!-- starts upload an excel xlsx file button -->
         <form style="display: inline-block;" method="post" enctype="multipart/form-data">
             <input type="file" name="file" accept=".xlsx" required>
-            <button type="submit">Upload Excel file</button>
+            <button type="submit" class="btn">Upload Excel XLSX file</button>
         </form>
 
 </div>
