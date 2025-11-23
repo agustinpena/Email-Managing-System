@@ -140,6 +140,18 @@ def import_excel_to_db(excel_file):
         return False
 
 
+# define funct that converts date from str to datetime object
+def string_to_datetime_date(date_str):
+    if "/" in date_str:
+        new_date_str = date_str.replace('/', '-')
+    elif "." in date_str:
+        new_date_str = date_str.replace('.', '-')
+    else:
+        new_date_str = date_str
+    datetime_object = datetime.strptime(new_date_str, '%d-%m-%Y').date()
+    return datetime_object
+
+
 # route to main page (/)
 @app.route('/', methods=['POST', 'GET'])  # type: ignore
 def index():
@@ -351,13 +363,17 @@ def new_task():
     if request.method == 'POST':
         # define needed values for the task
         datetime_object = datetime.strptime('1-1-2000', '%d-%m-%Y').date()
+        current_date_object = datetime.now().date()
+        # process deadline from string to datetime object
+        deadline_str = request.form['deadline']
+        deadline_dt_object = string_to_datetime_date(deadline_str)
         # Create new task from form data
         new_task = Task(
             journal=request.form['journal'],  # type: ignore
             collection=request.form['collection'],  # type: ignore
             type=request.form['type'],  # type: ignore
             title=request.form['title'],  # type: ignore
-            deadline=datetime_object,  # type: ignore
+            deadline=deadline_dt_object,  # type: ignore
             author1=request.form['author1'],    # type: ignore
             email1=request.form['email1'].lower(),  # type: ignore
             author2=request.form['author2'],  # type: ignore
@@ -366,7 +382,7 @@ def new_task():
             email3=request.form['email3'].lower(),  # type: ignore
             date_invited=datetime_object,  # type: ignore
             status='',  # type: ignore
-            last_change_in_notes=datetime_object,  # type: ignore
+            last_change_in_notes=current_date_object,  # type: ignore
             notes=''  # type: ignore
         )
         db.session.add(new_task)

@@ -100,11 +100,18 @@
             <input type="text" name="email3" maxlength="60" size='45'>
         </div>
 
+        <br>
+
+        <div>
+            <label>Deadline: </label>
+            <input type="text" name="deadline" maxlength="60" size='45'>
+        </div>
+
         <br><br>
 
         <button type="submit" class="btn">Create Task</button>
         &nbsp;&nbsp;&nbsp;
-        <a href="{{ url_for('index') }}">Cancel</a>
+        <a href="{{ url_for('index') }}" class="one">Cancel</a>
     </form>
 
 </div>
