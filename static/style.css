@@ -1,18 +1,16 @@
 body {
-    background-color: #2d3b55;
-    color: #fff9c4
+    background-color: #0e1425;
+    color: #eeb902
 }
 
-/* COLORS
-==========
-Soft Navy Blue (Primary)
---soft-navy: #2d3b55;
-
-Pale Banana Yellow (Accent)
---pale-yellow: #fff9c4;
-
-Warm Gray (Neutral)
---warm-gray: #4a5568; */
+/*
+Color palette for ScholarTrack: 
+Navy Blue:        #0e1425
+Steel Blue:       #2d7dd2
+Yellow Green:     #97cc04
+Saffron Yellow:   #eeb902
+Persimmon Orange: #f45d01
+*/
 
 .main-title-container {
     position: relative;
@@ -40,27 +38,27 @@ Warm Gray (Neutral)
     text-align: center;
 }
 
-a.one:link {color: #e0fd97;}
-a.one:visited {color: #e0fd97;}
+a.one:link {color: #97cc04;}
+a.one:visited {color: #97cc04;}
 
-a.two:link {color: #65ee8e;}
-a.two:visited {color: #65ee8e;}
+a.two:link {color: #f45d01;}
+a.two:visited {color: #f45d01;}
 
 table {
-    background-color: #2d3b55;
+    background-color: #28354d;
     border-collapse: collapse;
     width: 98%;
     margin-left: auto;
     margin-right: auto;
-    color: #fff9c4
+    color: #eeb902
 }
 
 tr:nth-child(even) {
-    background-color: #4a5568;
+    background-color: #31405e;
 }
 
 th {
-    background-color: #026186;
+    background-color: #1a497a;
     font-weight: bold;
     text-align: center;
 }
