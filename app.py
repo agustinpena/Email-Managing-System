@@ -249,7 +249,7 @@ def edit_email(task_id):
     if request.method == 'POST':
         # generate email
         _subject = request.form['subject']
-        _sender = 'correo.x@mail.ru'
+        _sender = 'agustin.pena@yandex.ru'
         _body = request.form['email_content']
 
         msg = Message(subject=_subject, sender=_sender,
@@ -406,7 +406,7 @@ def follow_up(task_id):
         # Send the edited follow-up email
         msg = Message(
             subject=request.form['subject'],
-            sender='j.agustin.pena.a@gmail.com',
+            sender='agustin.pena@yandex.ru',
             recipients=[request.form['recipient']],
             body=request.form['email_content']
         )
