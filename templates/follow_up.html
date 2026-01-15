@@ -2,18 +2,8 @@
 
 {% block head %}
 <title>Edit Reminder Email</title>
-{% endblock %}
-
-{% block head_scripts %}
-<script src="{{ url_for('static', filename='tinymce/tinymce.min.js') }}"></script>
-{% endblock %}
-
-{% block scripts %}
-<script>
-  tinymce.init({
-    selector: '#email_content'
-  });
-</script>
+{{ super() }}
+<script src="{{ url_for('static', filename='tinymce/js/tinymce/tinymce.min.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -44,7 +34,9 @@
  
         <br>
 
-        <textarea id="email_content" name="email_content" rows="20" style="width:80%">{{ email_content }}</textarea>
+        <div style="display: flex; justify-content: center;">
+            <textarea id="email_content" name="email_content" rows="20" style="width:80%">{{ email_content }}</textarea>
+        </div>
 
         <br><br><br>
 
@@ -54,4 +46,16 @@
 
     </form>
 </div>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+  tinymce.init({
+    selector: '#email_content',
+    license_key: 'gpl',
+    plugins: 'link textcolor',
+    toolbar: 'bold italic underline forecolor link alignleft aligncenter alignright',
+  });
+</script>
 {% endblock %}

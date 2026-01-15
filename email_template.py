@@ -1,5 +1,4 @@
 # generate email template for martin's app
-# TODO : format the date to display month in letters
 
 
 # define dictionaries
@@ -115,8 +114,8 @@ def generate_email_text(task):
     msg += article_types[article_type] + "\n\n"
     # append text with deadline
     msg += "Submission would be due by " + deadline + \
-        ", but we can accommodate for some flexibility.\n\n"
-    msg += "Your expertise would make a significant impact, and we hope we'll have the privilege to read you in ICM.\n"
+        ", but we can accommodate for some flexibility.<br><br>"
+    msg += "Your expertise would make a significant impact, and we hope we'll have the privilege to read you in ICM.<br>"
     msg += "Kindly confirm your participation within seven days, and always feel free to reach out to the Editorial office for any questions or requests.\n\n"
     msg += "Thank you for considering this invitation.\n\nKind regards,\nICM Editorial Office\n\n"
     # append signatories
