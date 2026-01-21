@@ -7,18 +7,18 @@ collections = {
     "On behalf of Prof. Samir Jaber, I'm delighted to invite you to contribute to Intensive Care Medicine.|",
 
     "brain":
-    """On behalf of Pofs. Samir Jaber, Chiara Robba & Geert Meyfroidt, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"The Brain in the Line of Fire: Neuroprotection and Critical Illness\"|On behalf of\nProf. Kiara Robba, Deputy Editor and Collection Editor\nProf. Geert Meyfroidt, Collection Guest Editor\nProf. Samir Jaber, ICM Editor-in-Chief""",
+    """On behalf of Pofs. Samir Jaber, Chiara Robba & Geert Meyfroidt, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"The Brain in the Line of Fire: Neuroprotection and Critical Illness\"|On behalf of<br>Prof. Kiara Robba, Deputy Editor and Collection Editor<br>Prof. Geert Meyfroidt, Collection Guest Editor<br>Prof. Samir Jaber, ICM Editor-in-Chief""",
 
     "standard care":
-    """On behalf of Profs. Samir Jaber and Elie Azoulay, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming \"Standard of Care\" collection focusing on different areas of critical care, providing comprehensive insights into the current best practices and guidelines that define the standard of care in the field.|On behalf of\nProf. Elie Azoulay, Collection Guest Editor\nProf. Samir Jaber, ICM Editor-in-Chief""",
+    """On behalf of Profs. Samir Jaber and Elie Azoulay, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming \"Standard of Care\" collection focusing on different areas of critical care, providing comprehensive insights into the current best practices and guidelines that define the standard of care in the field.|On behalf of<br>Prof. Elie Azoulay, Collection Guest Editor<br>Prof. Samir Jaber, ICM Editor-in-Chief""",
 
-    "physiology": """On behalf of Profs. Samir Jaber, Julie Helms & Michael Darmon, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"Physiology in Critical Illness\".|On behalf of\nProf. Julie Helms, Section Editor & Collection Editor\nProf. Michael Darmon, Section Editor & Collection Editor\nProf. Samir Jaber, ICM Editor-in-Chief""",
+    "physiology": """On behalf of Profs. Samir Jaber, Julie Helms & Michael Darmon, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"Physiology in Critical Illness\".|On behalf of<br>Prof. Julie Helms, Section Editor & Collection Editor<br>Prof. Michael Darmon, Section Editor & Collection Editor<br>Prof. Samir Jaber, ICM Editor-in-Chief""",
 
     "perioperative":
-    """On behalf of Profs. Samir Jaber, Chiara Robba, Stefan Schaller & Audrey de Jong, I'm delighted to invite  you to contribute to Intensive Care Medicine's upcoming collection titled \"Perioperative Care in the Intensive Care Unit\".|On behalf of\nProf. Chiara Robba, Deputy Director & Collection Editor\nProf. Stefan Schaller, Section Editor & Collection Editor\nProf. Audrey de Jong, Collection Guest Editor\nProf. Samir Jaber, ICM Editor-in-Chief""",
+    """On behalf of Profs. Samir Jaber, Chiara Robba, Stefan Schaller & Audrey de Jong, I'm delighted to invite  you to contribute to Intensive Care Medicine's upcoming collection titled \"Perioperative Care in the Intensive Care Unit\".|On behalf of<br>Prof. Chiara Robba, Deputy Director & Collection Editor<br>Prof. Stefan Schaller, Section Editor & Collection Editor<br>Prof. Audrey de Jong, Collection Guest Editor<br>Prof. Samir Jaber, ICM Editor-in-Chief""",
 
     "obesity":
-    """On behalf of Profs. Samir Jaber, Carol Hodgson, Gonzalo Hernandez & Emma Ridley, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"Obesity in the Intensive Care Unit\".|On behalf of\nProf. Carol Hodgson, Section Editor & Collection Editor\nProf. Gonzalo Hernandez, Section Editor & Collection Editor\nProf. Emma Ridley, Collection Guest Editor\nProf. Samir Jaber, ICM Editor-in-Chief"""
+    """On behalf of Profs. Samir Jaber, Carol Hodgson, Gonzalo Hernandez & Emma Ridley, I'm delighted to invite you to contribute to Intensive Care Medicine's upcoming collection titled \"Obesity in the Intensive Care Unit\".|On behalf of<br>Prof. Carol Hodgson, Section Editor & Collection Editor<br>Prof. Gonzalo Hernandez, Section Editor & Collection Editor<br>Prof. Emma Ridley, Collection Guest Editor<br>Prof. Samir Jaber, ICM Editor-in-Chief"""
 }
 
 article_types = {
@@ -41,7 +41,7 @@ article_types = {
 
 # creates letter salutation from a list of authors
 def salute(authors):
-    salutation = '\n'
+    salutation = ''
     counter = 0
     if len(authors) <= 3:
         for author in authors:
@@ -50,13 +50,13 @@ def salute(authors):
             else:
                 surname = ' '.join(author.split()[1:])
             if counter < len(authors)-1:
-                salutation += "Dear Dr " + surname + ',\n'
+                salutation += "Dear Dr " + surname + ',<br>'
             else:
                 salutation += "Dear Dr " + surname + ','
             counter += 1
     else:
         salutation += 'Dear All,'
-    return salutation.strip() + '\n'
+    return salutation.strip() + '<br>'
 
 
 # capitalizes first letter of each word in a
@@ -102,36 +102,36 @@ def generate_email_text(task):
     # create list of authors
     authors = create_list_of_authors(task)
     # append salute to authors
-    msg += salute(authors) + '\n'
+    msg += salute(authors) + '<br>'
     # append first paragraph
     msg += collections[task_collection].split('|')[0] + ' '
     # append text common to all emails
     cad = "Your expertise is highly regarded and we would greatly value a " + article_type + \
         " from you on \"" + article_title + "\". " + \
-        "You may refine the title as you see fit.\n\n"
+        "You may refine the title as you see fit.<br><br>"
     msg += cad
     # append submission guidelines
-    msg += article_types[article_type] + "\n\n"
+    msg += article_types[article_type] + "<br><br>"
     # append text with deadline
     msg += "Submission would be due by " + deadline + \
         ", but we can accommodate for some flexibility.<br><br>"
     msg += "Your expertise would make a significant impact, and we hope we'll have the privilege to read you in ICM.<br>"
-    msg += "Kindly confirm your participation within seven days, and always feel free to reach out to the Editorial office for any questions or requests.\n\n"
-    msg += "Thank you for considering this invitation.\n\nKind regards,\nICM Editorial Office\n\n"
+    msg += "Kindly confirm your participation within seven days, and always feel free to reach out to the Editorial office for any questions or requests.<br><br>"
+    msg += "Thank you for considering this invitation.<br><br>Kind regards,<br>ICM Editorial Office<br><br>"
     # append signatories
-    msg += collections[task_collection].split('|')[1] + '\n'
+    msg += collections[task_collection].split('|')[1] + '<br>'
 
-    return '\n' + msg
+    return msg
 
 
 def generate_FOLLOW_UP_email_text(task):
-    msg = '\n'
+    msg = ''
     # get info from the task
     article_type = task.type.lower()
     article_title = first_letter_to_cap(task.title.strip())
     authors = create_list_of_authors(task)
     # create email text
-    msg += salute(authors) + '\n\n' + "I hope you are doing well. I'm writing to kindly follow up on our earlier invitation to contribute to the " + article_type + " on " + article_title + \
-        " for ICM.\nWould you still be interested to draft such a piece? Of course, the Editorial Office would be happy to assist you in inviting your co-authors.\n\nFeel free to reach out to us for any question!\n\nKind regards,\nMartin"
+    msg += salute(authors) + '<br>' + "I hope you are doing well. I'm writing to kindly follow up on our earlier invitation to contribute to the " + article_type + " on " + article_title + \
+        " for ICM.<br>Would you still be interested to draft such a piece? Of course, the Editorial Office would be happy to assist you in inviting your co-authors.<br><br>Feel free to reach out to us for any question!<br><br>Kind regards,<br>Martin"
 
     return msg
