@@ -4,6 +4,12 @@
 <title>Edit Reminder Email</title>
 {{ super() }}
 <script src="{{ url_for('static', filename='tinymce/js/tinymce/tinymce.min.js') }}"></script>
+
+<style>
+    #email_content {
+        visibility: hidden;
+    }
+</style>
 {% endblock %}
 
 {% block body %}
@@ -56,6 +62,13 @@
     license_key: 'gpl',
     plugins: 'link textcolor',
     toolbar: 'bold italic underline forecolor link alignleft aligncenter alignright',
+
+    // Show the editor when ready
+    setup: function(editor) {
+        editor.on('init', function() {
+            document.getElementById('email_content').style.visibility = 'visible';
+        });
+    }
   });
 </script>
 {% endblock %}
