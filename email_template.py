@@ -1,4 +1,4 @@
-# generate email template for martin's app
+# generate email template
 
 
 # define dictionaries
@@ -23,23 +23,23 @@ collections = {
 
 article_types = {
     "short editorial":
-    """Key guidelines for the submission:
-    • Max 1000 words and 15 references (recent sources preferred)
-    • 1 mandatory illustration (table or figure)
-    • 3 maximum authors from diverse centers and geographic zones
+    """Key guidelines for the submission:<br>
+    • Max 1000 words and 15 references (recent sources preferred)<br>
+    • 1 mandatory illustration (table or figure)<br>
+    • 3 maximum authors from diverse centers and geographic zones<br>
     • Electronic supplementary materials are unlimited""",
 
     "review article":
-    """Key guidelines for the submission:
-    • Max 4,000 words and 75 references (recent sources preferred)
-    • Abstract: unstructured (narrative) or structured (systematic reviews)
-    • 4-6 keywords; up to 5 illustrations (i.e., 3 figures & 2 tables)
-    • Between 12 and 15 authors, from diverse centers and geographic zones
+    """Key guidelines for the submission:<br>
+    • Max 4,000 words and 75 references (recent sources preferred)<br>
+    • Abstract: unstructured (narrative) or structured (systematic reviews)<br>
+    • 4-6 keywords; up to 5 illustrations (i.e., 3 figures & 2 tables)<br>
+    • Between 12 and 15 authors, from diverse centers and geographic zones<br>
     • Electronic supplementary materials are unlimited"""
 }
 
 
-# creates letter salutation from a list of authors
+# function that creates letter salutation from a list of authors
 def salute(authors):
     salutation = ''
     counter = 0
@@ -59,7 +59,7 @@ def salute(authors):
     return salutation.strip() + '<br>'
 
 
-# capitalizes first letter of each word in a
+# function capitalizing first letter of each word in a
 # sentence but leaves all other letters untouched
 def first_letter_to_cap(cad):
     words = cad.split()
@@ -76,6 +76,12 @@ def create_list_of_authors(task):
     if task.author3 != None and task.author3.replace(' ', '') != '':
         authors.append(task.author3.strip())
     return authors
+
+
+def get_signature():
+    with open('signature.txt', 'r', encoding='utf-8') as f:
+        html_string = f.read()
+    return html_string
 
 
 def generate_email_text(task):
@@ -119,7 +125,8 @@ def generate_email_text(task):
     msg += "Kindly confirm your participation within seven days, and always feel free to reach out to the Editorial office for any questions or requests.<br><br>"
     msg += "Thank you for considering this invitation.<br><br>Kind regards,<br>ICM Editorial Office<br><br>"
     # append signatories
-    msg += collections[task_collection].split('|')[1] + '<br>'
+    msg += collections[task_collection].split('|')[1]
+    msg += get_signature() + '<br>'
 
     return msg
 
@@ -133,5 +140,7 @@ def generate_FOLLOW_UP_email_text(task):
     # create email text
     msg += salute(authors) + '<br>' + "I hope you are doing well. I'm writing to kindly follow up on our earlier invitation to contribute to the " + article_type + " on " + article_title + \
         " for ICM.<br>Would you still be interested to draft such a piece? Of course, the Editorial Office would be happy to assist you in inviting your co-authors.<br><br>Feel free to reach out to us for any question!<br><br>Kind regards,<br>Martin"
+
+    msg += get_signature() + '<br>'
 
     return msg
