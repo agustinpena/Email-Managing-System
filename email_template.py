@@ -139,7 +139,7 @@ def generate_FOLLOW_UP_email_text(task):
     authors = create_list_of_authors(task)
     # create email text
     msg += salute(authors) + '<br>' + "I hope you are doing well. I'm writing to kindly follow up on our earlier invitation to contribute to the " + article_type + " on " + article_title + \
-        " for ICM.<br>Would you still be interested to draft such a piece? Of course, the Editorial Office would be happy to assist you in inviting your co-authors.<br><br>Feel free to reach out to us for any question!<br><br>Kind regards,<br>Martin"
+        " for ICM.<br>Would you still be interested to draft such a piece? Of course, the Editorial Office would be happy to assist you in inviting your co-authors.<br><br>Feel free to reach out to us for any question!<br><br>Kind regards,<br>"
 
     msg += get_signature() + '<br>'
 
