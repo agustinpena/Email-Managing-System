@@ -3,7 +3,7 @@
     <tr>
         <td valign="middle" style="padding-right: 15px; border-right: 1px solid #e2e8f0;">
             <!-- LOGO IS IN LINE BELOW -->
-            <img src="static/icm_logo_web.png" 
+            <img src="https://agustinpena.github.io/icm_logo_web.png" 
                  alt="IntensCareMed Logo" 
                  width="140" 
                  height="55" 
