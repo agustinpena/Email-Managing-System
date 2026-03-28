@@ -20,11 +20,12 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
 # create database
 db = SQLAlchemy(app)
 # mail settings
-app.config['MAIL_SERVER'] = 'smtp.mail.ru'
+app.config['MAIL_SERVER'] = 'smtp.yandex.ru'
 app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TSL'] = False
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'correo.x@mail.ru'
-app.config['MAIL_PASSWORD'] = 'SpB7bMxqqJdcd7YKSQIh'
+app.config['MAIL_USERNAME'] = 'agustin.pena@yandex.ru'
+app.config['MAIL_PASSWORD'] = '5Nezahualcoyotl5%'
 mail = Mail(app)
 
 
