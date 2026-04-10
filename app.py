@@ -362,27 +362,31 @@ def edit_task(task_id):
 @app.route('/new-task', methods=['GET', 'POST'])
 def new_task():
     if request.method == 'POST':
-        # define needed values for the task
-        datetime_object = datetime.strptime('1-1-2000', '%d-%m-%Y').date()
+        # Set value for current date
         current_date_object = datetime.now().date()
-        # process deadline from string to datetime object
-        deadline_str = request.form['deadline']
-        deadline_dt_object = string_to_datetime_date(deadline_str)
+
+        # Get date parts from dropdowns
+        day = int(request.form['deadline_day'])
+        month = int(request.form['deadline_month'])
+        year = int(request.form['deadline_year'])
+        # combine values into a single deadline_date
+        deadline_date = datetime(year, month, day).date()
+
         # Create new task from form data
         new_task = Task(
             journal=request.form['journal'],  # type: ignore
             collection=request.form['collection'],  # type: ignore
             type=request.form['type'],  # type: ignore
             title=request.form['title'],  # type: ignore
-            deadline=deadline_dt_object,  # type: ignore
+            deadline=deadline_date,  # type: ignore
             author1=request.form['author1'],    # type: ignore
             email1=request.form['email1'].lower(),  # type: ignore
             author2=request.form['author2'],  # type: ignore
             email2=request.form['email2'].lower(),  # type: ignore
             author3=request.form['author3'],  # type: ignore
             email3=request.form['email3'].lower(),  # type: ignore
-            date_invited=datetime_object,  # type: ignore
-            status='',  # type: ignore
+            date_invited=current_date_object,  # type: ignore
+            status='Created',  # type: ignore
             last_change_in_notes=current_date_object,  # type: ignore
             notes=''  # type: ignore
         )
